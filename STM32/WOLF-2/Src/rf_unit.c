@@ -1,4 +1,5 @@
 #include "rf_unit.h"
+#include "PCF8575.h"
 #include "atu.h"
 #include "audio_filters.h"
 #include "front_unit.h"
@@ -9,7 +10,6 @@
 #include "stm32h7xx_hal.h"
 #include "system_menu.h"
 #include "trx_manager.h"
-#include "PCF8575.h"
 
 bool FAN_Active = false;
 static bool FAN_Active_old = false;
@@ -309,45 +309,45 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 #define PCF8575_ARRAY_SIZE 16
 	bool PCF8575_array[PCF8575_ARRAY_SIZE];
 	static bool PCF8575_array_old[PCF8575_ARRAY_SIZE];
-	
+
 	PCF8575_array[0] = band == BANDID_FM;
 	PCF8575_array[1] = band == BANDID_70cm;
 	PCF8575_array[2] = band == BANDID_2m;
 	PCF8575_array[3] = band == BANDID_23cm;
 	PCF8575_array[4] = wideband;
-	PCF8575_array[5] = band == BANDID_70cm || band == BANDID_2m; //D1_V1
-	PCF8575_array[6] = wideband || band == BANDID_2m; //D1_V2
-	PCF8575_array[7] = second_band == BANDID_23cm || second_band == BANDID_2m; //D2_V2
-	
-	PCF8575_array[8] = second_band == BANDID_70cm || second_band == BANDID_2m; //D2_V1
-	PCF8575_array[9] = vhf && TRX.ATT && att_val_16; 
+	PCF8575_array[5] = band == BANDID_70cm || band == BANDID_2m;               // D1_V1
+	PCF8575_array[6] = wideband || band == BANDID_2m;                          // D1_V2
+	PCF8575_array[7] = second_band == BANDID_23cm || second_band == BANDID_2m; // D2_V2
+
+	PCF8575_array[8] = second_band == BANDID_70cm || second_band == BANDID_2m; // D2_V1
+	PCF8575_array[9] = vhf && TRX.ATT && att_val_16;
 	PCF8575_array[10] = vhf && TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK;
 	PCF8575_array[11] = vhf && TRX.ATT && att_val_1;
 	PCF8575_array[12] = vhf && TRX.ATT && att_val_2;
 	PCF8575_array[13] = vhf && TRX.ATT && att_val_4;
 	PCF8575_array[14] = vhf && TRX.ATT && att_val_8;
 	PCF8575_array[15] = vhf && TRX.LNA;
-	
+
 	uint16_t PCF8575_value = 0;
 	bool PCF8575_array_equal = true;
 	for (uint8_t i = 0; i < PCF8575_ARRAY_SIZE; i++) {
 		PCF8575_value |= PCF8575_array[i] << i;
-		
+
 		if (PCF8575_array[i] != PCF8575_array_old[i]) {
 			PCF8575_array_equal = false;
 		}
 	}
-	
+
 	if (!PCF8575_array_equal || clean) {
 		bool res = PCF8575_SetOutputs(PCF8575_value);
-		
+
 		if (res) {
 			for (uint8_t i = 0; i < PCF8575_ARRAY_SIZE; i++) {
 				PCF8575_array_old[i] = PCF8575_array[i];
 			}
 		}
 	}
-	
+
 	// Shift array
 #define SHIFT_ARRAY_SIZE 64
 	bool shift_array[SHIFT_ARRAY_SIZE];
@@ -362,14 +362,14 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	shift_array[57] = VHF_RXA;                          // U19	VHF_RXA
 	shift_array[56] = VHF_RXB;                          // U19	VHF_RXB
 
-	shift_array[55] = !tx_lpf_0;                                                                                            // U20 STPIC6C595TTR	HFAMP_B0
-	shift_array[54] = !tx_lpf_1;                                                                                            // U20	HFAMP_B1
-	shift_array[53] = !tx_lpf_2;                                                                                            // U20	HFAMP_B2
-	shift_array[52] = !tx_lpf_3;                                                                                            // U20	HFAMP_B3
+	shift_array[55] = !tx_lpf_0;                                                                         // U20 STPIC6C595TTR	HFAMP_B0
+	shift_array[54] = !tx_lpf_1;                                                                         // U20	HFAMP_B1
+	shift_array[53] = !tx_lpf_2;                                                                         // U20	HFAMP_B2
+	shift_array[52] = !tx_lpf_3;                                                                         // U20	HFAMP_B3
 	shift_array[51] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && CurrentVFO->Freq < 60000000; // U20	HF TX
-	shift_array[50] = !(TRX.ATT && att_val_8);                                                                              // U20	VHF_ATT8
-	shift_array[49] = !(TRX.ATT && att_val_16);                                                                             // U20	VHF_ATT16
-	shift_array[48] = false;                                                                                                // U20	FAN (code in bottom)
+	shift_array[50] = !(TRX.ATT && att_val_8);                                                           // U20	VHF_ATT8
+	shift_array[49] = !(TRX.ATT && att_val_16);                                                          // U20	VHF_ATT16
+	shift_array[48] = false;                                                                             // U20	FAN (code in bottom)
 
 	shift_array[47] = currentAnt == TRX_ANT_2;    // U21 STPIC6C595TTR	ANT
 	shift_array[46] = TUNER_Enabled && TRX.ATU_T; // U21	TUNE T
@@ -389,14 +389,14 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	shift_array[33] = TRX_Tune;                                           // U23	EXT TUNE
 	shift_array[32] = false;                                              // U23	EXT Reserved
 
-	shift_array[31] = false;                                           // U24 74HC595	Reserved
+	shift_array[31] = false;                        // U24 74HC595	Reserved
 	shift_array[30] = CurrentVFO->Freq >= 60000000; // U24	HF/VHF
-	shift_array[29] = false;                                           // U24	Reserved
-	shift_array[28] = false;                                           // U24	Reserved
-	shift_array[27] = TRX.ATT && att_val_16;                           // U24	ATT 16
-	shift_array[26] = TRX.ATT && att_val_05;                           // U24	ATT 0.5
-	shift_array[25] = TRX.ATT && att_val_1;                            // U24	ATT 1
-	shift_array[24] = TRX.ATT && att_val_2;                            // U24	ATT 2
+	shift_array[29] = false;                        // U24	Reserved
+	shift_array[28] = false;                        // U24	Reserved
+	shift_array[27] = TRX.ATT && att_val_16;        // U24	ATT 16
+	shift_array[26] = TRX.ATT && att_val_05;        // U24	ATT 0.5
+	shift_array[25] = TRX.ATT && att_val_1;         // U24	ATT 1
+	shift_array[24] = TRX.ATT && att_val_2;         // U24	ATT 2
 
 	shift_array[23] = TRX.ATT && att_val_4; // U22 74HC595	ATT 4
 	shift_array[22] = TRX.ATT && att_val_8; // U22	ATT 8
@@ -471,7 +471,7 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 			shift_array[48] = true;
 		}
 	}
-	
+
 	/// Set shift array
 	bool array_equal = true;
 	for (uint8_t i = 0; i < SHIFT_ARRAY_SIZE; i++) {

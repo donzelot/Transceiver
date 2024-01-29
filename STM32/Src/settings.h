@@ -692,7 +692,7 @@ extern struct TRX_SETTINGS {
 	uint8_t TX_Compressor_speed_AMFM;
 	uint8_t TX_Compressor_maxgain_AMFM;
 	uint8_t SELFHEAR_Volume;
-	uint8_t SELFHEAR_Volume_CW;	
+	uint8_t SELFHEAR_Volume_CW;
 	uint8_t LINE_Volume;
 	uint8_t CODEC_Out_Volume;
 	uint8_t FM_Stereo_Modulation;

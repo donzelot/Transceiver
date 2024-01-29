@@ -931,7 +931,7 @@ const static struct sysmenu_item_handler sysmenu_cw_handlers[] = {
     {"PTT Type", SYSMENU_ENUMR, NULL, (uint32_t *)&TRX.CW_PTT_Type, SYSMENU_HANDL_CW_PTT_Type, (const enumerate_item[3]){"Key", "PTT", "KEY+PTT"}},
     {"Pitch", SYSMENU_UINT16, NULL, (uint32_t *)&TRX.CW_Pitch, SYSMENU_HANDL_CW_Pitch},
     {"Self Hear", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.CW_SelfHear, SYSMENU_HANDL_CW_SelfHear},
-    {"SelfHear Volume CW", SYSMENU_UINT8, NULL, (uint32_t *)&TRX.SELFHEAR_Volume_CW, SYSMENU_HANDL_CW_SELFHEAR_Volume},		
+    {"SelfHear Volume CW", SYSMENU_UINT8, NULL, (uint32_t *)&TRX.SELFHEAR_Volume_CW, SYSMENU_HANDL_CW_SELFHEAR_Volume},
 #if !defined(FRONTPANEL_SMALL_V1)
     {"Macros 1 name", SYSMENU_RUN, NULL, 0, SYSMENU_HANDL_CW_SetCWMacrosName1},
     {"Macros 1", SYSMENU_RUN, NULL, 0, SYSMENU_HANDL_CW_SetCWMacros1},
