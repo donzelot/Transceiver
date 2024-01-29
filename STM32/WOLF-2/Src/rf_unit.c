@@ -310,23 +310,23 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	bool PCF8575_array[PCF8575_ARRAY_SIZE];
 	static bool PCF8575_array_old[PCF8575_ARRAY_SIZE];
 
-	PCF8575_array[0] = band == BANDID_FM;
-	PCF8575_array[1] = band == BANDID_70cm;
-	PCF8575_array[2] = band == BANDID_2m;
-	PCF8575_array[3] = band == BANDID_23cm;
-	PCF8575_array[4] = wideband;
+	PCF8575_array[0] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && band == BANDID_FM;
+	PCF8575_array[1] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && band == BANDID_70cm;
+	PCF8575_array[2] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && band == BANDID_2m;
+	PCF8575_array[3] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && band == BANDID_23cm;
+	PCF8575_array[4] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && wideband;
 	PCF8575_array[5] = band == BANDID_70cm || band == BANDID_2m;               // D1_V1
 	PCF8575_array[6] = wideband || band == BANDID_2m;                          // D1_V2
 	PCF8575_array[7] = second_band == BANDID_23cm || second_band == BANDID_2m; // D2_V2
 
 	PCF8575_array[8] = second_band == BANDID_70cm || second_band == BANDID_2m; // D2_V1
 	PCF8575_array[9] = vhf && TRX.ATT && att_val_16;
-	PCF8575_array[10] = vhf && TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK;
+	PCF8575_array[10] = vhf && TRX.ATT && att_val_05;
 	PCF8575_array[11] = vhf && TRX.ATT && att_val_1;
 	PCF8575_array[12] = vhf && TRX.ATT && att_val_2;
 	PCF8575_array[13] = vhf && TRX.ATT && att_val_4;
 	PCF8575_array[14] = vhf && TRX.ATT && att_val_8;
-	PCF8575_array[15] = vhf && TRX.LNA;
+	PCF8575_array[15] = vhf && TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && TRX.LNA;
 
 	uint16_t PCF8575_value = 0;
 	bool PCF8575_array_equal = true;
