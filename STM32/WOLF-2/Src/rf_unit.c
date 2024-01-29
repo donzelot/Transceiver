@@ -326,7 +326,7 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	PCF8575_array[12] = vhf && TRX.ATT && att_val_2;
 	PCF8575_array[13] = vhf && TRX.ATT && att_val_4;
 	PCF8575_array[14] = vhf && TRX.ATT && att_val_8;
-	PCF8575_array[15] = vhf && TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && TRX.LNA;
+	PCF8575_array[15] = vhf && !TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && TRX.LNA;
 
 	uint16_t PCF8575_value = 0;
 	bool PCF8575_array_equal = true;
