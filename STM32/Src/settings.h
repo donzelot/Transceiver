@@ -16,7 +16,7 @@
 #define FPGA_VERSION_STR "8.2.0" // needed FPGA version Wolf/Wolf-2/Wolf-X1
 #endif
 
-#define SETT_VERSION 149        // Settings config version
+#define SETT_VERSION 150        // Settings config version
 #define CALIB_VERSION 91        // Calibration config version
 #define WIFI_SETTINGS_VERSION 5 // WiFi config version
 
@@ -692,6 +692,7 @@ extern struct TRX_SETTINGS {
 	uint8_t TX_Compressor_speed_AMFM;
 	uint8_t TX_Compressor_maxgain_AMFM;
 	uint8_t SELFHEAR_Volume;
+	uint8_t SELFHEAR_Volume_CW;	
 	uint8_t LINE_Volume;
 	uint8_t CODEC_Out_Volume;
 	uint8_t FM_Stereo_Modulation;

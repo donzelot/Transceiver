@@ -301,7 +301,8 @@ void LoadSettings(bool clear) {
 		TRX.Beeper = true;                                             // Keyboard beeper
 		TRX.CTCSS_Freq = 0;                                            // CTCSS FM Frequency
 		TRX.SELFHEAR_Volume = 40;                                      // Selfhearing volume
-		TRX.FM_Stereo = false;                                         // Stereo FM Mode
+		TRX.SELFHEAR_Volume_CW = 40;                                   // Selfhearing volume_CW
+    TRX.FM_Stereo = false;                                         // Stereo FM Mode
 		TRX.FM_Stereo_Modulation = 40;                                 // Stereo FM Sub-carrier modulation
 		TRX.VAD_THRESHOLD = 150;                                       // Threshold of SSB/SCAN squelch
 		TRX.VOX = false;                                               // TX by voice activation

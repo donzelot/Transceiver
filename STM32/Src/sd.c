@@ -1160,6 +1160,7 @@ static void SDCOMM_EXPORT_SETTINGS_handler(void) {
 			SD_WRITE_SETT_LINE("TRX.Beeper", (uint64_t *)&TRX.Beeper, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.CTCSS_Freq", (uint64_t *)&TRX.CTCSS_Freq, SYSMENU_FLOAT32);
 			SD_WRITE_SETT_LINE("TRX.SELFHEAR_Volume", (uint64_t *)&TRX.SELFHEAR_Volume, SYSMENU_UINT8);
+			SD_WRITE_SETT_LINE("TRX.SELFHEAR_Volume_CW", (uint64_t *)&TRX.SELFHEAR_Volume_CW, SYSMENU_UINT8);			
 			SD_WRITE_SETT_LINE("TRX.FM_Stereo", (uint64_t *)&TRX.FM_Stereo, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.FM_Stereo_Modulation", (uint64_t *)&TRX.FM_Stereo_Modulation, SYSMENU_UINT8);
 			SD_WRITE_SETT_LINE("TRX.AGC_Spectral", (uint64_t *)&TRX.AGC_Spectral, SYSMENU_BOOLEAN);
@@ -2210,6 +2211,9 @@ static void SDCOMM_PARSE_SETTINGS_LINE(char *line) {
 	}
 	if (strcmp(name, "TRX.SELFHEAR_Volume") == 0) {
 		TRX.SELFHEAR_Volume = (uint8_t)uintval;
+	}
+	if (strcmp(name, "TRX.SELFHEAR_Volume_CW") == 0) {
+		TRX.SELFHEAR_Volume_CW = (uint8_t)uintval;
 	}
 	if (strcmp(name, "TRX.FM_Stereo") == 0) {
 		TRX.FM_Stereo = bval;

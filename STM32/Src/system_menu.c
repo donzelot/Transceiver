@@ -177,6 +177,7 @@ static void SYSMENU_HANDL_TX_VOX_THRESHOLD(int8_t direction);
 static void SYSMENU_HANDL_TX_VOX_TIMEOUT(int8_t direction);
 static void SYSMENU_HANDL_TX_FT8_Auto_CQ(int8_t direction);
 
+static void SYSMENU_HANDL_CW_SELFHEAR_Volume(int8_t direction);
 static void SYSMENU_HANDL_CW_DotToDashRate(int8_t direction);
 static void SYSMENU_HANDL_CW_Iambic(int8_t direction);
 static void SYSMENU_HANDL_CW_Iambic_Type(int8_t direction);
@@ -930,6 +931,7 @@ const static struct sysmenu_item_handler sysmenu_cw_handlers[] = {
     {"PTT Type", SYSMENU_ENUMR, NULL, (uint32_t *)&TRX.CW_PTT_Type, SYSMENU_HANDL_CW_PTT_Type, (const enumerate_item[3]){"Key", "PTT", "KEY+PTT"}},
     {"Pitch", SYSMENU_UINT16, NULL, (uint32_t *)&TRX.CW_Pitch, SYSMENU_HANDL_CW_Pitch},
     {"Self Hear", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.CW_SelfHear, SYSMENU_HANDL_CW_SelfHear},
+    {"SelfHear Volume CW", SYSMENU_UINT8, NULL, (uint32_t *)&TRX.SELFHEAR_Volume_CW, SYSMENU_HANDL_CW_SELFHEAR_Volume},		
 #if !defined(FRONTPANEL_SMALL_V1)
     {"Macros 1 name", SYSMENU_RUN, NULL, 0, SYSMENU_HANDL_CW_SetCWMacrosName1},
     {"Macros 1", SYSMENU_RUN, NULL, 0, SYSMENU_HANDL_CW_SetCWMacros1},
@@ -3481,6 +3483,16 @@ static void SYSMENU_HANDL_TX_SELFHEAR_Volume(int8_t direction) {
 	}
 	if (TRX.SELFHEAR_Volume < 1) {
 		TRX.SELFHEAR_Volume = 1;
+	}
+}
+
+static void SYSMENU_HANDL_CW_SELFHEAR_Volume(int8_t direction) {
+	TRX.SELFHEAR_Volume_CW += direction;
+	if (TRX.SELFHEAR_Volume_CW > 100) {
+		TRX.SELFHEAR_Volume_CW = 100;
+	}
+	if (TRX.SELFHEAR_Volume_CW < 1) {
+		TRX.SELFHEAR_Volume_CW = 1;
 	}
 }
 

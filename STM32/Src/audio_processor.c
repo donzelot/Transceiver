@@ -1075,7 +1075,8 @@ void processTxAudio(void) {
 	}
 
 	float32_t selfhear_amplitude = volume2rate((float32_t)TRX.SELFHEAR_Volume / 100.0f);
-
+	float32_t selfhear_CW_amplitude = volume2rate((float32_t)TRX.SELFHEAR_Volume_CW / 100.0f);
+	
 #if HRDW_HAS_SD
 	// SD card send
 	if (SD_RecordInProcess) {
@@ -1184,7 +1185,7 @@ void processTxAudio(void) {
 		if (TRX.CW_SelfHear && mode == TRX_MODE_CW && !TRX_Tune) {
 			static float32_t cwgen_index = 0;
 			for (uint_fast16_t i = 0; i < AUDIO_BUFFER_HALF_SIZE; i++) {
-				float32_t point = generateSin(selfhear_amplitude * APROC_Audio_Buffer_TX_I[i], &cwgen_index, TRX_SAMPLERATE, TRX.CW_Pitch);
+				float32_t point = generateSin(selfhear_CW_amplitude * APROC_Audio_Buffer_TX_I[i], &cwgen_index, TRX_SAMPLERATE, TRX.CW_Pitch);
 				int32_t sample = 0;
 				arm_float_to_q31(&point, &sample, 1);
 				int32_t data = convertToSPIBigEndian(sample);
