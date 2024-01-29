@@ -1,5 +1,5 @@
-#ifndef __RFFC2071_PWR_MONITOR_H
-#define __RFFC2071_PWR_MONITOR_H
+#ifndef __RFFC2071_H
+#define __RFFC2071_H
 
 #include "hardware.h"
 #if HRDW_HAS_RFFC2071_MIXER

@@ -8,6 +8,12 @@
  * - always start with i2c_delay rather than end
  */
 
+// Current addreses (without r/w bit)
+// WM8731 - 0x1A (separate bus)
+// PCF8575 - 0x20
+// INA226 - 0x40
+// GT911 - 0x5D
+
 I2C_DEVICE I2C_CODEC = {
     .SDA_PORT = WM8731_SDA_GPIO_Port,
     .SDA_PIN = WM8731_SDA_Pin,

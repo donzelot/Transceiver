@@ -579,12 +579,6 @@ void TRX_setFrequency(uint64_t _freq, VFO *vfo) {
 	bool rx2_invert_iq_by_mixer = false;
 
 #if HRDW_HAS_VHF_MIXER
-	// delete if transverter chain needed in future
-	cur_vfo_freq = CurrentVFO->SpectrumCenterFreq + (TRX.RIT_Enabled ? TRX_RIT : 0);
-	vfo_tx_freq = CurrentVFO->Freq + (TRX.XIT_Enabled ? TRX_XIT : 0);
-	sec_vfo_freq = SecondaryVFO->Freq + (TRX.RIT_Enabled ? TRX_RIT : 0);
-	//
-
 	uint64_t cur_vfo_freq_mhz = cur_vfo_freq / HZ_IN_MHZ;
 	uint64_t sec_vfo_freq_mhz = sec_vfo_freq / HZ_IN_MHZ;
 
