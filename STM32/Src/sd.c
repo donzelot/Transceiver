@@ -1540,6 +1540,8 @@ static void SDCOMM_EXPORT_CALIBRATIONS_handler(void) {
 			SD_WRITE_SETT_LINE("CALIBRATE.INA226_Shunt_mOhm", (uint64_t *)&CALIBRATE.INA226_Shunt_mOhm, SYSMENU_FLOAT32);
 			SD_WRITE_SETT_LINE("CALIBRATE.INA226_VoltageOffset", (uint64_t *)&CALIBRATE.INA226_VoltageOffset, SYSMENU_FLOAT32);
 			SD_WRITE_SETT_LINE("CALIBRATE.PWR_VLT_Calibration", (uint64_t *)&CALIBRATE.PWR_VLT_Calibration, SYSMENU_FLOAT32);
+			SD_WRITE_SETT_LINE("CALIBRATE.PWR_CUR_Calibration", (uint64_t *)&CALIBRATE.PWR_CUR_Calibration, SYSMENU_FLOAT32);
+			SD_WRITE_SETT_LINE("CALIBRATE.VHF_Mixer_IF_MHz", (uint64_t *)&CALIBRATE.VHF_Mixer_IF_MHz, SYSMENU_FLOAT32);
 			SD_WRITE_SETT_LINE("CALIBRATE.ATU_AVERAGING", (uint64_t *)&CALIBRATE.ATU_AVERAGING, SYSMENU_UINT8);
 			SD_WRITE_SETT_LINE("CALIBRATE.LNA_compensation", (uint64_t *)&CALIBRATE.LNA_compensation, SYSMENU_INT8);
 			SD_WRITE_SETT_LINE("CALIBRATE.CAT_Type", (uint64_t *)&CALIBRATE.CAT_Type, SYSMENU_UINT8);
@@ -3146,6 +3148,12 @@ static void SDCOMM_PARSE_SETTINGS_LINE(char *line) {
 	}
 	if (strcmp(name, "CALIBRATE.PWR_VLT_Calibration") == 0) {
 		CALIBRATE.PWR_VLT_Calibration = floatval;
+	}
+	if (strcmp(name, "CALIBRATE.PWR_CUR_Calibration") == 0) {
+		CALIBRATE.PWR_CUR_Calibration = floatval;
+	}
+	if (strcmp(name, "CALIBRATE.VHF_Mixer_IF_MHz") == 0) {
+		CALIBRATE.VHF_Mixer_IF_MHz = floatval;
 	}
 	if (strcmp(name, "CALIBRATE.ATU_AVERAGING") == 0) {
 		CALIBRATE.ATU_AVERAGING = (uint8_t)uintval;

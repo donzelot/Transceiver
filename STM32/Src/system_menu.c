@@ -455,6 +455,7 @@ static void SYSMENU_HANDL_CALIB_NOTX_NOTHAM(int8_t direction);
 static void SYSMENU_HANDL_CALIB_OTA_update(int8_t direction);
 static void SYSMENU_HANDL_CALIB_PWR_CUR_Calibration(int8_t direction);
 static void SYSMENU_HANDL_CALIB_PWR_VLT_Calibration(int8_t direction);
+static void SYSMENU_HANDL_CALIB_VHF_Mixer_IF_MHz(int8_t direction);
 static void SYSMENU_HANDL_CALIB_RF_GAIN_10M(int8_t direction);
 static void SYSMENU_HANDL_CALIB_RF_GAIN_12M(int8_t direction);
 static void SYSMENU_HANDL_CALIB_RF_GAIN_13CM(int8_t direction);
@@ -1185,9 +1186,6 @@ const static struct sysmenu_item_handler sysmenu_calibration_handlers[] = {
 #if defined(FRONTPANEL_MINI)
     {"RF-Unit Type", SYSMENU_ENUM, NULL, (uint32_t *)&CALIBRATE.RF_unit_type, SYSMENU_HANDL_CALIB_RF_unit_type, (const enumerate_item[2]){"HF", "VHF"}},
 #endif
-#if HRDW_HAS_I2C_SHARED_BUS && HRDW_HAS_VHF_RF_MIXER
-    {"VHF Mixer Board", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.VHF_Mixer_Board, SYSMENU_HANDL_CALIB_VHF_Mixer_Board},
-#endif
     {"ALC Port Enabled", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.ALC_Port_Enabled, SYSMENU_HANDL_CALIB_ALC_Port_Enabled},
     {"ALC Inverted", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.ALC_Inverted_Logic, SYSMENU_HANDL_CALIB_ALC_Inverted_Logic},
 #ifdef LAY_320x240
@@ -1403,6 +1401,10 @@ const static struct sysmenu_item_handler sysmenu_calibration_handlers[] = {
     {"TCXO Freq, kHz", SYSMENU_UINT16, NULL, (uint32_t *)&CALIBRATE.TCXO_frequency, SYSMENU_HANDL_CALIB_TCXO},
 #endif
     {"VCXO Correction", SYSMENU_INT16, NULL, (uint32_t *)&CALIBRATE.VCXO_correction, SYSMENU_HANDL_CALIB_VCXO},
+#if HRDW_HAS_I2C_SHARED_BUS && HRDW_HAS_VHF_RF_MIXER
+    {"VHF Mixer Board", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.VHF_Mixer_Board, SYSMENU_HANDL_CALIB_VHF_Mixer_Board},
+    {"VHF Mixer IF, MHz", SYSMENU_FLOAT32, NULL, (uint32_t *)&CALIBRATE.VHF_Mixer_IF_MHz, SYSMENU_HANDL_CALIB_VHF_Mixer_IF_MHz},
+#endif
 #ifdef TOUCHPAD_GT911
     {"Touchpad horiz flip", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.TOUCHPAD_horizontal_flip, SYSMENU_HANDL_CALIB_TOUCHPAD_horizontal_flip},
     {"Touchpad verti flip", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.TOUCHPAD_vertical_flip, SYSMENU_HANDL_CALIB_TOUCHPAD_vertical_flip},
@@ -7915,6 +7917,8 @@ static void SYSMENU_HANDL_CALIB_VHF_Mixer_Board(int8_t direction) {
 	BAND_SELECTABLE[BANDID_2m] = CALIBRATE.ENABLE_2m_band || TRX.Transverter_2m || CALIBRATE.VHF_Mixer_Board;
 	BAND_SELECTABLE[BANDID_70cm] = CALIBRATE.ENABLE_70cm_band || TRX.Transverter_70cm || CALIBRATE.VHF_Mixer_Board;
 	BAND_SELECTABLE[BANDID_23cm] = CALIBRATE.ENABLE_23cm_band || TRX.Transverter_23cm || CALIBRATE.VHF_Mixer_Board;
+
+	TRX_setFrequency(CurrentVFO->Freq, CurrentVFO);
 }
 #endif
 
@@ -8269,6 +8273,18 @@ static void SYSMENU_HANDL_CALIB_PWR_CUR_Calibration(int8_t direction) {
 	if (CALIBRATE.PWR_CUR_Calibration > 5.0f) {
 		CALIBRATE.PWR_CUR_Calibration = 5.0f;
 	}
+}
+
+static void SYSMENU_HANDL_CALIB_VHF_Mixer_IF_MHz(int8_t direction) {
+	CALIBRATE.VHF_Mixer_IF_MHz += (float32_t)direction * 0.1f;
+	if (CALIBRATE.VHF_Mixer_IF_MHz < 25.0f) {
+		CALIBRATE.VHF_Mixer_IF_MHz = 25.0f;
+	}
+	if (CALIBRATE.VHF_Mixer_IF_MHz > 31.0f) {
+		CALIBRATE.VHF_Mixer_IF_MHz = 31.0f;
+	}
+
+	TRX_setFrequency(CurrentVFO->Freq, CurrentVFO);
 }
 
 static void SYSMENU_HANDL_CALIB_ATU_AVERAGING(int8_t direction) {

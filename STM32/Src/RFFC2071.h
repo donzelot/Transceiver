@@ -6,7 +6,6 @@
 
 #define RFMIXER_MIN_FREQ_MHz 60   // 85 from datasheet
 #define RFMIXER_MAX_FREQ_MHz 5000 // loss after 2.7
-#define RFMIXER_IF_FREQ 29000000
 #define RFMIXER_FIXED_IF true
 
 #define RFFC2071_REGS_NUM 31

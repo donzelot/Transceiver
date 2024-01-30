@@ -17,7 +17,7 @@
 #endif
 
 #define SETT_VERSION 151        // Settings config version
-#define CALIB_VERSION 91        // Calibration config version
+#define CALIB_VERSION 92        // Calibration config version
 #define WIFI_SETTINGS_VERSION 5 // WiFi config version
 
 #define TRX_SAMPLERATE 48000                 // audio stream sampling rate during processing and TX (NOT RX!)
@@ -875,6 +875,8 @@ extern struct TRX_CALIBRATE {
 	float32_t INA226_Shunt_mOhm;
 	float32_t PWR_VLT_Calibration;
 	float32_t PWR_CUR_Calibration;
+	float32_t VHF_Mixer_IF_MHz;
+
 	uint32_t RFU_LPF_END;
 	uint32_t RFU_HPF_START;
 	uint32_t RFU_BPF_0_START; // UHF
@@ -895,10 +897,12 @@ extern struct TRX_CALIBRATE {
 	uint32_t RFU_BPF_7_END;
 	uint32_t RFU_BPF_8_START;
 	uint32_t RFU_BPF_8_END;
+
 	int16_t RTC_Calibration;
 	int16_t VCXO_correction;
 	int16_t smeter_calibration_hf;
 	int16_t smeter_calibration_vhf;
+
 	uint16_t TCXO_frequency;
 	uint16_t MAX_ChargePump_Freq;
 	uint16_t TX_StartDelay;
@@ -926,7 +930,9 @@ extern struct TRX_CALIBRATE {
 	uint16_t TOUCHPAD_CLICK_TIMEOUT;
 	uint16_t TOUCHPAD_HOLD_TIMEOUT;
 	uint16_t TOUCHPAD_SWIPE_THRESHOLD_PX;
+
 	int8_t LNA_compensation;
+
 	uint8_t DAC_driver_mode;
 	uint8_t rf_out_power_2200m;
 	uint8_t rf_out_power_630m;
@@ -1002,6 +1008,7 @@ extern struct TRX_CALIBRATE {
 	uint8_t IF_GAIN_MIN;
 	uint8_t IF_GAIN_MAX;
 	uint8_t FAN_Medium_speed;
+
 	TRX_RF_UNIT_TYPE RF_unit_type;
 	TRX_TANGENT_TYPE TangentType;
 	CAT_TYPE CAT_Type;
@@ -1009,6 +1016,7 @@ extern struct TRX_CALIBRATE {
 	COM_LINE_MODE COM_CAT_RTS_Mode;
 	COM_LINE_MODE COM_DEBUG_DTR_Mode;
 	COM_LINE_MODE COM_DEBUG_RTS_Mode;
+
 	bool ENCODER_INVERT;
 	bool ENCODER2_INVERT;
 	bool NOTX_NOTHAM;
@@ -1053,6 +1061,7 @@ extern struct TRX_CALIBRATE {
 	bool Swap_USB_IQ;
 	bool ATT_compensation;
 	bool VHF_Mixer_Board;
+
 	CHANNEL_SAVED_SETTINGS_TYPE MEMORY_CHANNELS[MEMORY_CHANNELS_COUNT];
 	uint32_t BAND_MEMORIES[BANDS_COUNT][BANDS_MEMORIES_COUNT];
 
