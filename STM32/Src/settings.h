@@ -691,7 +691,7 @@ extern struct TRX_SETTINGS {
 	uint8_t TX_Compressor_speed_AMFM;
 	uint8_t TX_Compressor_maxgain_AMFM;
 	uint8_t SELFHEAR_Volume;
-	uint8_t SELFHEAR_Volume_CW;	
+	uint8_t SELFHEAR_Volume_CW;
 	uint8_t LINE_Volume;
 	uint8_t CODEC_Out_Volume;
 	uint8_t FM_Stereo_Modulation;
@@ -1052,6 +1052,7 @@ extern struct TRX_CALIBRATE {
 	bool ALC_Inverted_Logic;
 	bool Swap_USB_IQ;
 	bool ATT_compensation;
+	bool VHF_Mixer_Board;
 	CHANNEL_SAVED_SETTINGS_TYPE MEMORY_CHANNELS[MEMORY_CHANNELS_COUNT];
 	uint32_t BAND_MEMORIES[BANDS_COUNT][BANDS_MEMORIES_COUNT];
 

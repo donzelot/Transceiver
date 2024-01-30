@@ -1160,7 +1160,7 @@ static void SDCOMM_EXPORT_SETTINGS_handler(void) {
 			SD_WRITE_SETT_LINE("TRX.Beeper", (uint64_t *)&TRX.Beeper, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.CTCSS_Freq", (uint64_t *)&TRX.CTCSS_Freq, SYSMENU_FLOAT32);
 			SD_WRITE_SETT_LINE("TRX.SELFHEAR_Volume", (uint64_t *)&TRX.SELFHEAR_Volume, SYSMENU_UINT8);
-			SD_WRITE_SETT_LINE("TRX.SELFHEAR_Volume_CW", (uint64_t *)&TRX.SELFHEAR_Volume_CW, SYSMENU_UINT8);			
+			SD_WRITE_SETT_LINE("TRX.SELFHEAR_Volume_CW", (uint64_t *)&TRX.SELFHEAR_Volume_CW, SYSMENU_UINT8);
 			SD_WRITE_SETT_LINE("TRX.FM_Stereo", (uint64_t *)&TRX.FM_Stereo, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.FM_Stereo_Modulation", (uint64_t *)&TRX.FM_Stereo_Modulation, SYSMENU_UINT8);
 			SD_WRITE_SETT_LINE("TRX.AGC_Spectral", (uint64_t *)&TRX.AGC_Spectral, SYSMENU_BOOLEAN);
@@ -1512,6 +1512,7 @@ static void SDCOMM_EXPORT_CALIBRATIONS_handler(void) {
 			SD_WRITE_SETT_LINE("CALIBRATE.ENABLE_marine_band", (uint64_t *)&CALIBRATE.ENABLE_marine_band, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("CALIBRATE.ENABLE_70cm_band", (uint64_t *)&CALIBRATE.ENABLE_70cm_band, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("CALIBRATE.ENABLE_23cm_band", (uint64_t *)&CALIBRATE.ENABLE_23cm_band, SYSMENU_BOOLEAN);
+			SD_WRITE_SETT_LINE("CALIBRATE.VHF_Mixer_Board", (uint64_t *)&CALIBRATE.VHF_Mixer_Board, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("CALIBRATE.Transverter_Custom_Offset_MHz", (uint64_t *)&CALIBRATE.Transverter_Custom_Offset_MHz, SYSMENU_UINT16);
 			SD_WRITE_SETT_LINE("CALIBRATE.Transverter_2m_RF_MHz", (uint64_t *)&CALIBRATE.Transverter_2m_RF_MHz, SYSMENU_UINT16);
 			SD_WRITE_SETT_LINE("CALIBRATE.Transverter_2m_IF_MHz", (uint64_t *)&CALIBRATE.Transverter_2m_IF_MHz, SYSMENU_UINT16);
@@ -3062,6 +3063,9 @@ static void SDCOMM_PARSE_SETTINGS_LINE(char *line) {
 	}
 	if (strcmp(name, "CALIBRATE.ENABLE_23cm_band") == 0) {
 		CALIBRATE.ENABLE_23cm_band = bval;
+	}
+	if (strcmp(name, "CALIBRATE.VHF_Mixer_Board") == 0) {
+		CALIBRATE.VHF_Mixer_Board = bval;
 	}
 	if (strcmp(name, "CALIBRATE.Transverter_Custom_Offset_MHz") == 0) {
 		CALIBRATE.Transverter_Custom_Offset_MHz = (uint16_t)uintval;

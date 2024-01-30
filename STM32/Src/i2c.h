@@ -43,7 +43,7 @@ typedef struct {
 } I2C_DEVICE;
 
 extern I2C_DEVICE I2C_CODEC;
-#ifdef HAS_TOUCHPAD
+#if HRDW_HAS_I2C_SHARED_BUS
 extern I2C_DEVICE I2C_SHARED_BUS;
 #endif
 

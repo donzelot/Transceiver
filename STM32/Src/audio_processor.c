@@ -1076,7 +1076,7 @@ void processTxAudio(void) {
 
 	float32_t selfhear_amplitude = volume2rate((float32_t)TRX.SELFHEAR_Volume / 100.0f);
 	float32_t selfhear_CW_amplitude = volume2rate((float32_t)TRX.SELFHEAR_Volume_CW / 100.0f);
-	
+
 #if HRDW_HAS_SD
 	// SD card send
 	if (SD_RecordInProcess) {

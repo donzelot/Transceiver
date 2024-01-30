@@ -405,6 +405,7 @@ WiFi module ESP-01 must have fresh firmware with SDK 3.0.4 and higher, and AT co
 * **Transverter Offset, MHz** - Offset frequency shown on the display (for custom transverters)
 * **Transverter xxx IF, MHz** - Setting the IF frequency of the transverter
 * **Transverter xxx RF, MHz** - Setting the RF frequency of the transceiver to match the IF
+* **VHF Mixer Board** - Enable VHF board with RF mixer support (wolf-2)
 
 ### Memory Channels
 

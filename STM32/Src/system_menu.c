@@ -385,6 +385,7 @@ static void SYSMENU_HANDL_CALIB_ENABLE_AIR_band(int8_t direction);
 static void SYSMENU_HANDL_CALIB_ENABLE_marine_band(int8_t direction);
 static void SYSMENU_HANDL_CALIB_ENABLE_70cm_band(int8_t direction);
 static void SYSMENU_HANDL_CALIB_ENABLE_23cm_band(int8_t direction);
+static void SYSMENU_HANDL_CALIB_VHF_Mixer_Board(int8_t direction);
 static void SYSMENU_HANDL_CALIB_ENCODER2_DEBOUNCE(int8_t direction);
 static void SYSMENU_HANDL_CALIB_ENCODER2_INVERT(int8_t direction);
 static void SYSMENU_HANDL_CALIB_ENCODER2_ON_FALLING(int8_t direction);
@@ -1184,6 +1185,9 @@ const static struct sysmenu_item_handler sysmenu_calibration_handlers[] = {
 #if defined(FRONTPANEL_MINI)
     {"RF-Unit Type", SYSMENU_ENUM, NULL, (uint32_t *)&CALIBRATE.RF_unit_type, SYSMENU_HANDL_CALIB_RF_unit_type, (const enumerate_item[2]){"HF", "VHF"}},
 #endif
+#if HRDW_HAS_I2C_SHARED_BUS && HRDW_HAS_VHF_RF_MIXER
+    {"VHF Mixer Board", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.VHF_Mixer_Board, SYSMENU_HANDL_CALIB_VHF_Mixer_Board},
+#endif
     {"ALC Port Enabled", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.ALC_Port_Enabled, SYSMENU_HANDL_CALIB_ALC_Port_Enabled},
     {"ALC Inverted", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.ALC_Inverted_Logic, SYSMENU_HANDL_CALIB_ALC_Inverted_Logic},
 #ifdef LAY_320x240
@@ -1293,7 +1297,7 @@ const static struct sysmenu_item_handler sysmenu_calibration_handlers[] = {
 #endif
     {"IF Gain MIN", SYSMENU_UINT8, NULL, (uint32_t *)&CALIBRATE.IF_GAIN_MIN, SYSMENU_HANDL_CALIB_IF_GAIN_MIN},
     {"IF Gain MAX", SYSMENU_UINT8, NULL, (uint32_t *)&CALIBRATE.IF_GAIN_MAX, SYSMENU_HANDL_CALIB_IF_GAIN_MAX},
-#if defined(FRONTPANEL_BIG_V1) || defined(FRONTPANEL_KT_100S) || defined(FRONTPANEL_WF_100D) || defined(FRONTPANEL_WOLF_2)
+#if HRDW_HAS_I2C_SHARED_BUS
     {"INA226 Pwr Mon", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.INA226_EN, SYSMENU_HANDL_CALIB_INA226_PWR_MON},
     {"INA226 Shunt mOhm", SYSMENU_FLOAT32, NULL, (uint32_t *)&CALIBRATE.INA226_Shunt_mOhm, SYSMENU_HANDL_CALIB_INA226_Shunt_mOhm},
     {"INA226 Voltage", SYSMENU_FLOAT32, NULL, (uint32_t *)&CALIBRATE.INA226_VoltageOffset, SYSMENU_HANDL_CALIB_INA226_VoltageOffset},
@@ -7851,7 +7855,7 @@ static void SYSMENU_HANDL_CALIB_ENABLE_2m_band(int8_t direction) {
 		CALIBRATE.ENABLE_2m_band = false;
 	}
 
-	BAND_SELECTABLE[BANDID_2m] = CALIBRATE.ENABLE_2m_band || TRX.Transverter_2m;
+	BAND_SELECTABLE[BANDID_2m] = CALIBRATE.ENABLE_2m_band || TRX.Transverter_2m || CALIBRATE.VHF_Mixer_Board;
 }
 
 static void SYSMENU_HANDL_CALIB_ENABLE_AIR_band(int8_t direction) {
@@ -7884,7 +7888,7 @@ static void SYSMENU_HANDL_CALIB_ENABLE_70cm_band(int8_t direction) {
 		CALIBRATE.ENABLE_70cm_band = false;
 	}
 
-	BAND_SELECTABLE[BANDID_70cm] = CALIBRATE.ENABLE_70cm_band || TRX.Transverter_70cm;
+	BAND_SELECTABLE[BANDID_70cm] = CALIBRATE.ENABLE_70cm_band || TRX.Transverter_70cm || CALIBRATE.VHF_Mixer_Board;
 }
 
 static void SYSMENU_HANDL_CALIB_ENABLE_23cm_band(int8_t direction) {
@@ -7895,8 +7899,24 @@ static void SYSMENU_HANDL_CALIB_ENABLE_23cm_band(int8_t direction) {
 		CALIBRATE.ENABLE_23cm_band = false;
 	}
 
-	BAND_SELECTABLE[BANDID_23cm] = CALIBRATE.ENABLE_23cm_band || TRX.Transverter_23cm;
+	BAND_SELECTABLE[BANDID_23cm] = CALIBRATE.ENABLE_23cm_band || TRX.Transverter_23cm || CALIBRATE.VHF_Mixer_Board;
 }
+
+#if HRDW_HAS_I2C_SHARED_BUS && HRDW_HAS_VHF_RF_MIXER
+static void SYSMENU_HANDL_CALIB_VHF_Mixer_Board(int8_t direction) {
+	if (direction > 0) {
+		CALIBRATE.VHF_Mixer_Board = true;
+		RFMIXER_Init();
+	}
+	if (direction < 0) {
+		CALIBRATE.VHF_Mixer_Board = false;
+	}
+
+	BAND_SELECTABLE[BANDID_2m] = CALIBRATE.ENABLE_2m_band || TRX.Transverter_2m || CALIBRATE.VHF_Mixer_Board;
+	BAND_SELECTABLE[BANDID_70cm] = CALIBRATE.ENABLE_70cm_band || TRX.Transverter_70cm || CALIBRATE.VHF_Mixer_Board;
+	BAND_SELECTABLE[BANDID_23cm] = CALIBRATE.ENABLE_23cm_band || TRX.Transverter_23cm || CALIBRATE.VHF_Mixer_Board;
+}
+#endif
 
 static void SYSMENU_HANDL_CALIB_TRANSV_OFFSET_Custom(int8_t direction) {
 	CALIBRATE.Transverter_Custom_Offset_MHz += direction;

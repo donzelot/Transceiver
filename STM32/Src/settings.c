@@ -302,7 +302,7 @@ void LoadSettings(bool clear) {
 		TRX.CTCSS_Freq = 0;                                            // CTCSS FM Frequency
 		TRX.SELFHEAR_Volume = 40;                                      // Selfhearing volume
 		TRX.SELFHEAR_Volume_CW = 40;                                   // Selfhearing volume_CW
-    TRX.FM_Stereo = false;                                         // Stereo FM Mode
+		TRX.FM_Stereo = false;                                         // Stereo FM Mode
 		TRX.FM_Stereo_Modulation = 40;                                 // Stereo FM Sub-carrier modulation
 		TRX.VAD_THRESHOLD = 150;                                       // Threshold of SSB/SCAN squelch
 		TRX.VOX = false;                                               // TX by voice activation
@@ -1107,7 +1107,8 @@ void LoadCalibration(bool clear) {
 		CALIBRATE.COM_CAT_DTR_Mode = COM_LINE_MODE_KEYER;
 		CALIBRATE.COM_CAT_RTS_Mode = COM_LINE_MODE_PTT;
 #endif
-		CALIBRATE.Swap_USB_IQ = false; // Swap IQ for USB output
+		CALIBRATE.Swap_USB_IQ = false;     // Swap IQ for USB output
+		CALIBRATE.VHF_Mixer_Board = false; // Enable VHF mixer board
 
 		// Default memory channels
 		for (uint8_t i = 0; i < MEMORY_CHANNELS_COUNT; i++) {
@@ -1162,11 +1163,11 @@ void LoadCalibration(bool clear) {
 	BAND_SELECTABLE[BANDID_6m] = CALIBRATE.ENABLE_6m_band;
 	BAND_SELECTABLE[BANDID_4m] = CALIBRATE.ENABLE_4m_band;
 	BAND_SELECTABLE[BANDID_FM] = CALIBRATE.ENABLE_FM_band;
-	BAND_SELECTABLE[BANDID_2m] = CALIBRATE.ENABLE_2m_band || TRX.Transverter_2m;
+	BAND_SELECTABLE[BANDID_2m] = CALIBRATE.ENABLE_2m_band || TRX.Transverter_2m || CALIBRATE.VHF_Mixer_Board;
 	BAND_SELECTABLE[BANDID_AIR] = CALIBRATE.ENABLE_AIR_band;
 	BAND_SELECTABLE[BANDID_Marine] = CALIBRATE.ENABLE_marine_band;
-	BAND_SELECTABLE[BANDID_70cm] = CALIBRATE.ENABLE_70cm_band || TRX.Transverter_70cm;
-	BAND_SELECTABLE[BANDID_23cm] = CALIBRATE.ENABLE_23cm_band || TRX.Transverter_23cm;
+	BAND_SELECTABLE[BANDID_70cm] = CALIBRATE.ENABLE_70cm_band || TRX.Transverter_70cm || CALIBRATE.VHF_Mixer_Board;
+	BAND_SELECTABLE[BANDID_23cm] = CALIBRATE.ENABLE_23cm_band || TRX.Transverter_23cm || CALIBRATE.VHF_Mixer_Board;
 
 	// load WiFi settings after calibrations
 	LoadWiFiSettings(false);
