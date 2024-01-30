@@ -596,6 +596,11 @@ static void FRONTPANEL_ENCODER2_Rotated(int8_t direction) // rotated encoder, ha
 		if (TRX.Volume > 100) {
 			TRX.Volume = 100;
 		}
+
+		if (TRX.Mute) {
+			BUTTONHANDLER_MUTE(0);
+		}
+
 		char sbuff[32] = {0};
 		sprintf(sbuff, "Vol: %u%%", TRX.Volume);
 		LCD_showTooltip(sbuff);

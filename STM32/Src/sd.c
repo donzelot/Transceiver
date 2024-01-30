@@ -1176,7 +1176,6 @@ static void SDCOMM_EXPORT_SETTINGS_handler(void) {
 			// CW
 			SD_WRITE_SETT_LINE("TRX.CW_Pitch", (uint64_t *)&TRX.CW_Pitch, SYSMENU_UINT16);
 			SD_WRITE_SETT_LINE("TRX.CW_Key_timeout", (uint64_t *)&TRX.CW_Key_timeout, SYSMENU_UINT16);
-			SD_WRITE_SETT_LINE("TRX.CW_SelfHear", (uint64_t *)&TRX.CW_SelfHear, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.CW_KEYER", (uint64_t *)&TRX.CW_KEYER, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.CW_OneSymbolMemory", (uint64_t *)&TRX.CW_OneSymbolMemory, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.CW_KEYER_WPM", (uint64_t *)&TRX.CW_KEYER_WPM, SYSMENU_UINT16);
@@ -2258,9 +2257,6 @@ static void SDCOMM_PARSE_SETTINGS_LINE(char *line) {
 	}
 	if (strcmp(name, "TRX.CW_Key_timeout") == 0) {
 		TRX.CW_Key_timeout = (uint16_t)uintval;
-	}
-	if (strcmp(name, "TRX.CW_SelfHear") == 0) {
-		TRX.CW_SelfHear = bval;
 	}
 	if (strcmp(name, "TRX.CW_KEYER") == 0) {
 		TRX.CW_KEYER = bval;

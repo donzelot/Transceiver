@@ -4,6 +4,7 @@
 #if HRDW_HAS_I2C_SHARED_BUS
 
 static uint64_t RFFC2071_lo_freq_Hz_prev = 0;
+static uint64_t RFFC2071_lo_freq_Hz_result_prev = 0;
 
 static void RFFC2071_shift_out(I2C_DEVICE *dev, uint32_t val, uint8_t size);
 static void RFFC2071_SDA_OUT(I2C_DEVICE *dev);
@@ -80,7 +81,7 @@ void RFMIXER_disable(void) {
 
 uint64_t RFMIXER_Freq_Set(uint64_t lo_freq_Hz) {
 	if (lo_freq_Hz == RFFC2071_lo_freq_Hz_prev) {
-		return lo_freq_Hz;
+		return RFFC2071_lo_freq_Hz_result_prev;
 	}
 
 	RFMIXER_disable();
@@ -88,6 +89,7 @@ uint64_t RFMIXER_Freq_Set(uint64_t lo_freq_Hz) {
 	RFMIXER_enable();
 
 	RFFC2071_lo_freq_Hz_prev = lo_freq_Hz;
+	RFFC2071_lo_freq_Hz_result_prev = set_freq;
 	println("RFMixer LO Freq: ", set_freq);
 	return set_freq;
 }
