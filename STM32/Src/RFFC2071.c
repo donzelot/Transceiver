@@ -1,7 +1,7 @@
 #include "RFFC2071.h"
 #include "i2c.h"
 
-#if HRDW_HAS_RFFC2071_MIXER
+#if HRDW_HAS_I2C_SHARED_BUS
 
 static uint64_t RFFC2071_lo_freq_Hz_prev = 0;
 

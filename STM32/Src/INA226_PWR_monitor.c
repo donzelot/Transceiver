@@ -6,7 +6,7 @@ static float32_t Voltage = 0;
 static float32_t Current = 0;
 
 uint16_t INA226_Read2Byte(uint8_t reg_addr) {
-#ifdef HAS_TOUCHPAD
+#if HRDW_HAS_I2C_SHARED_BUS
 	uint16_t reg_data = 0;
 
 	i2c_beginTransmission_u8(&I2C_SHARED_BUS, INA226_ADDR);
@@ -29,7 +29,7 @@ uint16_t INA226_Read2Byte(uint8_t reg_addr) {
 }
 
 uint8_t INA226_Write2Byte(uint8_t reg_addr, uint16_t reg_data) {
-#ifdef HAS_TOUCHPAD
+#if HRDW_HAS_I2C_SHARED_BUS
 	uint8_t data_high = (uint8_t)((reg_data & 0xFF00) >> 8);
 	uint8_t data_low = (uint8_t)reg_data & 0x00FF;
 
@@ -47,7 +47,7 @@ uint8_t INA226_Write2Byte(uint8_t reg_addr, uint16_t reg_data) {
 }
 
 void INA226_Init(void) {
-#ifdef HAS_TOUCHPAD
+#if HRDW_HAS_I2C_SHARED_BUS
 	if (I2C_SHARED_BUS.locked) {
 		return;
 	}
@@ -80,7 +80,7 @@ void INA226_Init(void) {
 
 // Read the INA226 Voltage and Current data
 void Read_INA226_Data(void) {
-#ifdef HAS_TOUCHPAD
+#if HRDW_HAS_I2C_SHARED_BUS
 	if (I2C_SHARED_BUS.locked) {
 		return;
 	}

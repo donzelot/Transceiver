@@ -21,6 +21,7 @@
 #define HRDW_AUDIO_CODEC_WM8731 true
 #define HRDW_HAS_LNA_HF false
 #define HRDW_HAS_LNA_VHF false
+#define HRDW_HAS_I2C_SHARED_BUS false
 
 #define HRDW_DEBUG_ON_CAT_PORT false //********************************************************************
 

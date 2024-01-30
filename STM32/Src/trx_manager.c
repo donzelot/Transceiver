@@ -578,7 +578,7 @@ void TRX_setFrequency(uint64_t _freq, VFO *vfo) {
 	bool rx1_invert_iq_by_mixer = false;
 	bool rx2_invert_iq_by_mixer = false;
 
-#if HRDW_HAS_VHF_MIXER
+#if HRDW_HAS_I2C_SHARED_BUS && 0
 	uint64_t cur_vfo_freq_mhz = cur_vfo_freq / HZ_IN_MHZ;
 	uint64_t sec_vfo_freq_mhz = sec_vfo_freq / HZ_IN_MHZ;
 

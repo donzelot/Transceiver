@@ -23,8 +23,7 @@
 #define HRDW_HAS_ENC4 true
 #define HRDW_HAS_LNA_HF false
 #define HRDW_HAS_LNA_VHF true
-#define HRDW_HAS_RFFC2071_MIXER false
-#define HRDW_HAS_VHF_MIXER HRDW_HAS_RFFC2071_MIXER
+#define HRDW_HAS_I2C_SHARED_BUS true
 
 #define HRDW_DEBUG_ON_CAT_PORT false
 

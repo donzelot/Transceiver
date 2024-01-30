@@ -476,7 +476,7 @@ void EVENTS_do_EVERY_10ms(void) // 100 Hz
 	RF_UNIT_UpdateState(false);
 
 // INA226 current and voltage
-#ifdef HAS_TOUCHPAD
+#if HRDW_HAS_I2C_SHARED_BUS
 	if (CALIBRATE.INA226_EN) {
 		Read_INA226_Data();
 	}

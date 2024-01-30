@@ -26,7 +26,7 @@ I2C_DEVICE I2C_CODEC = {
     .locked = false,
 };
 
-#ifdef HAS_TOUCHPAD
+#if HRDW_HAS_I2C_SHARED_BUS
 I2C_DEVICE I2C_SHARED_BUS = {
     .SDA_PORT = T_I2C_SDA_GPIO_Port,
     .SDA_PIN = T_I2C_SDA_Pin,

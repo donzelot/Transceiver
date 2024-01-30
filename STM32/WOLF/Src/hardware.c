@@ -75,7 +75,7 @@ void HRDW_Init(void) {
 	HAL_ADCEx_InjectedStart(&hadc2); // ADC Tangent (some versions)
 #endif
 	HAL_ADCEx_InjectedStart(&hadc3); // ADC CPU temperature
-#if HRDW_HAS_VHF_MIXER
+#if HRDW_HAS_I2C_SHARED_BUS
 	RFMIXER_Init();
 #endif
 }

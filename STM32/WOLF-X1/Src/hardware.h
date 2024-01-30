@@ -21,6 +21,7 @@
 #define HRDW_AUDIO_CODEC_WM8731 true
 #define HRDW_HAS_LNA_HF true
 #define HRDW_HAS_LNA_VHF true
+#define HRDW_HAS_I2C_SHARED_BUS false
 
 // settings
 #define ADC_CLOCK (122880000LL + CALIBRATE.VCXO_correction)                 // ADC generator frequency

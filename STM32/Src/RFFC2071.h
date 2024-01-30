@@ -2,7 +2,7 @@
 #define __RFFC2071_H
 
 #include "hardware.h"
-#if HRDW_HAS_RFFC2071_MIXER
+#if HRDW_HAS_I2C_SHARED_BUS
 
 #define RFMIXER_MIN_FREQ_MHz 60
 #define RFMIXER_MAX_FREQ_MHz 5000 // loss after 2.7
