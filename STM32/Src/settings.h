@@ -16,7 +16,7 @@
 #define FPGA_VERSION_STR "8.2.0" // needed FPGA version Wolf/Wolf-2/Wolf-X1
 #endif
 
-#define SETT_VERSION 150        // Settings config version
+#define SETT_VERSION 151        // Settings config version
 #define CALIB_VERSION 91        // Calibration config version
 #define WIFI_SETTINGS_VERSION 5 // WiFi config version
 
@@ -608,7 +608,6 @@ extern struct TRX_SETTINGS {
 	uint16_t VOX_TIMEOUT;
 	uint16_t CW_Pitch;
 	uint16_t CW_Key_timeout;
-	uint16_t CW_SelfHear;
 	uint16_t CW_KEYER_WPM;
 	uint16_t LCD_SleepTimeout;
 	uint16_t RTTY_Speed;

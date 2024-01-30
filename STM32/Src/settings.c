@@ -314,7 +314,6 @@ void LoadSettings(bool clear) {
 		// CW
 		TRX.CW_Pitch = 600;                                             // LO offset in CW mode
 		TRX.CW_Key_timeout = 200;                                       // time of releasing transmission after the last character on the key
-		TRX.CW_SelfHear = true;                                         // self-control CW
 		TRX.CW_KEYER = true;                                            // Automatic key
 		TRX.CW_OneSymbolMemory = true;                                  // One symbol memory for automatic key
 		TRX.CW_KEYER_WPM = 25;                                          // Automatic key speed

@@ -918,6 +918,7 @@ const static struct sysmenu_item_handler sysmenu_tx_handlers[] = {
 
 const static struct sysmenu_item_handler sysmenu_cw_handlers[] = {
     {"Auto CW Mode", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.Auto_CW_Mode, SYSMENU_HANDL_CW_Auto_CW_Mode},
+    {"SelfHear Volume CW", SYSMENU_UINT8, NULL, (uint32_t *)&TRX.SELFHEAR_Volume_CW, SYSMENU_HANDL_CW_SELFHEAR_Volume},		
     {"CW In SSB", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.CW_In_SSB, SYSMENU_HANDL_CW_In_SSB},
     {"DotToDash Rate", SYSMENU_FLOAT32, NULL, (uint32_t *)&TRX.CW_DotToDashRate, SYSMENU_HANDL_CW_DotToDashRate},
     {"Edges smooth, ms", SYSMENU_UINT8, NULL, (uint32_t *)&TRX.CW_EDGES_SMOOTH_MS, SYSMENU_HANDL_CW_EDGES_SMOOTH_MS},
@@ -930,8 +931,6 @@ const static struct sysmenu_item_handler sysmenu_cw_handlers[] = {
     {"One symbol memory", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.CW_OneSymbolMemory, SYSMENU_HANDL_CW_OneSymbolMemory},
     {"PTT Type", SYSMENU_ENUMR, NULL, (uint32_t *)&TRX.CW_PTT_Type, SYSMENU_HANDL_CW_PTT_Type, (const enumerate_item[3]){"Key", "PTT", "KEY+PTT"}},
     {"Pitch", SYSMENU_UINT16, NULL, (uint32_t *)&TRX.CW_Pitch, SYSMENU_HANDL_CW_Pitch},
-    {"Self Hear", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.CW_SelfHear, SYSMENU_HANDL_CW_SelfHear},
-    {"SelfHear Volume CW", SYSMENU_UINT8, NULL, (uint32_t *)&TRX.SELFHEAR_Volume_CW, SYSMENU_HANDL_CW_SELFHEAR_Volume},		
 #if !defined(FRONTPANEL_SMALL_V1)
     {"Macros 1 name", SYSMENU_RUN, NULL, 0, SYSMENU_HANDL_CW_SetCWMacrosName1},
     {"Macros 1", SYSMENU_RUN, NULL, 0, SYSMENU_HANDL_CW_SetCWMacros1},
@@ -3829,15 +3828,6 @@ static void SYSMENU_HANDL_CW_Keyer_WPM(int8_t direction) {
 	}
 	if (TRX.CW_KEYER_WPM > 50) {
 		TRX.CW_KEYER_WPM = 50;
-	}
-}
-
-static void SYSMENU_HANDL_CW_SelfHear(int8_t direction) {
-	if (direction > 0) {
-		TRX.CW_SelfHear = true;
-	}
-	if (direction < 0) {
-		TRX.CW_SelfHear = false;
 	}
 }
 

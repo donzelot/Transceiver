@@ -1182,7 +1182,7 @@ void processTxAudio(void) {
 
 	// CW SelfHear
 	if (!LISTEN_RX_AUDIO_ON_TX) {
-		if (TRX.CW_SelfHear && mode == TRX_MODE_CW && !TRX_Tune) {
+		if ((TRX.SELFHEAR_Volume_CW > 1) && mode == TRX_MODE_CW && !TRX_Tune) {
 			static float32_t cwgen_index = 0;
 			for (uint_fast16_t i = 0; i < AUDIO_BUFFER_HALF_SIZE; i++) {
 				float32_t point = generateSin(selfhear_CW_amplitude * APROC_Audio_Buffer_TX_I[i], &cwgen_index, TRX_SAMPLERATE, TRX.CW_Pitch);
