@@ -919,7 +919,7 @@ const static struct sysmenu_item_handler sysmenu_tx_handlers[] = {
 
 const static struct sysmenu_item_handler sysmenu_cw_handlers[] = {
     {"Auto CW Mode", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.Auto_CW_Mode, SYSMENU_HANDL_CW_Auto_CW_Mode},
-    {"SelfHear Volume CW", SYSMENU_UINT8, NULL, (uint32_t *)&TRX.SELFHEAR_Volume_CW, SYSMENU_HANDL_CW_SELFHEAR_Volume},		
+    {"SelfHear Volume CW", SYSMENU_UINT8, NULL, (uint32_t *)&TRX.SELFHEAR_Volume_CW, SYSMENU_HANDL_CW_SELFHEAR_Volume},
     {"CW In SSB", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.CW_In_SSB, SYSMENU_HANDL_CW_In_SSB},
     {"DotToDash Rate", SYSMENU_FLOAT32, NULL, (uint32_t *)&TRX.CW_DotToDashRate, SYSMENU_HANDL_CW_DotToDashRate},
     {"Edges smooth, ms", SYSMENU_UINT8, NULL, (uint32_t *)&TRX.CW_EDGES_SMOOTH_MS, SYSMENU_HANDL_CW_EDGES_SMOOTH_MS},
