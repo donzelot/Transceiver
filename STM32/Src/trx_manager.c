@@ -587,7 +587,7 @@ void TRX_setFrequency(uint64_t _freq, VFO *vfo) {
 #if RFMIXER_FIXED_IF
 			int64_t rf_freq = cur_vfo_freq_mhz * HZ_IN_MHZ;
 			int64_t lo_freq = rf_freq + RFMIXER_IF_FREQ;
-			int64_t result_lo_freq = RFMIXER_Freq_Set(lo_freq);
+			int64_t result_lo_freq = RFMIXER_Freq_Set(lo_freq, lo_freq);
 			int64_t lo_freq_diff = lo_freq - result_lo_freq;
 			int64_t rf_freq_diff = rf_freq - cur_vfo_freq;
 			cur_vfo_freq = RFMIXER_IF_FREQ + lo_freq_diff + rf_freq_diff;

@@ -3,15 +3,17 @@
 
 #if HRDW_HAS_I2C_SHARED_BUS
 
-static uint64_t RFFC2071_lo_freq_Hz_prev = 0;
-static uint64_t RFFC2071_lo_freq_Hz_result_prev = 0;
+static uint64_t RFFC2071_lo_freq_Hz_RX_prev = 0;
+static uint64_t RFFC2071_lo_freq_Hz_RX_result_prev = 0;
+static uint64_t RFFC2071_lo_freq_Hz_TX_prev = 0;
+static uint64_t RFFC2071_lo_freq_Hz_TX_result_prev = 0;
 
 static void RFFC2071_shift_out(I2C_DEVICE *dev, uint32_t val, uint8_t size);
 static void RFFC2071_SDA_OUT(I2C_DEVICE *dev);
 static void RFFC2071_SDA_IN(I2C_DEVICE *dev);
 static uint16_t RFFC2071_Read_HalfWord(uint8_t reg_addr);
 static void RFFC2071_Write_HalfWord(uint8_t reg_addr, uint16_t value);
-static uint64_t RFFC2071_freq_calc(uint64_t lo_MHz);
+static uint64_t RFFC2071_freq_calc(uint64_t lo_MHz, uint8_t path, bool calc_result);
 
 uint16_t RFFC2071_reg[RFFC2071_REGS_NUM] = {
     0xbefa, /* 00 LF - Loop Filter Configuration */
@@ -25,7 +27,7 @@ uint16_t RFFC2071_reg[RFFC2071_REGS_NUM] = {
     0xff00, /* 08 VCO_AUTO - Auto VCO select control */
     0x8A20, /* 09 PLL_CTRL - PLL Control 0x8220 */
     0x0202, /* 0A PLL_BIAS - PLL Bias Settings */
-    0xFE00, /* 0B MIX_CONT - Mixer Control (0x4800 default + add current + full duplex) */
+    0xFE00, /* 0B MIX_CONT - Mixer Control (0x4800 default + add current (0b111) + full duplex) */
     0x1a94, /* 0C P1_FREQ1 - Path 1 Frequency 1 */
     0xd89d, /* 0D P1_FREQ2 - Path 1 Frequency 2 */
     0x8900, /* 0E P1_FREQ3 - Path 1 Frequency 3 */
@@ -76,21 +78,25 @@ void RFMIXER_disable(void) {
 	RFFC2071_reg[0x15] &= ~(1 << 14);
 	RFFC2071_Write_HalfWord(0x15, RFFC2071_reg[0x15]);
 
-	RFFC2071_lo_freq_Hz_prev = 0;
+	RFFC2071_lo_freq_Hz_RX_prev = 0;
+	RFFC2071_lo_freq_Hz_TX_prev = 0;
 }
 
-uint64_t RFMIXER_Freq_Set(uint64_t lo_freq_Hz) {
-	if (lo_freq_Hz == RFFC2071_lo_freq_Hz_prev) {
-		return RFFC2071_lo_freq_Hz_result_prev;
+uint64_t RFMIXER_Freq_Set(uint64_t RX_lo_freq_Hz, uint64_t TX_lo_freq_Hz) {
+	if (RX_lo_freq_Hz == RFFC2071_lo_freq_Hz_RX_prev && TX_lo_freq_Hz == RFFC2071_lo_freq_Hz_TX_prev) {
+		return RFFC2071_lo_freq_Hz_RX_result_prev;
 	}
 
 	RFMIXER_disable();
-	uint64_t set_freq = RFFC2071_freq_calc(lo_freq_Hz);
+	RFFC2071_freq_calc(TX_lo_freq_Hz, 1, false);
+	uint64_t set_freq = RFFC2071_freq_calc(RX_lo_freq_Hz, 2, true);
 	RFMIXER_enable();
 
-	RFFC2071_lo_freq_Hz_prev = lo_freq_Hz;
-	RFFC2071_lo_freq_Hz_result_prev = set_freq;
-	println("RFMixer LO Freq: ", set_freq);
+	RFFC2071_lo_freq_Hz_RX_prev = RX_lo_freq_Hz;
+	RFFC2071_lo_freq_Hz_RX_result_prev = set_freq;
+	RFFC2071_lo_freq_Hz_TX_prev = TX_lo_freq_Hz;
+	RFFC2071_lo_freq_Hz_TX_result_prev = set_freq;
+	println("RFMixer RX LO Freq: ", set_freq);
 	return set_freq;
 }
 
@@ -100,7 +106,7 @@ void RFMIXER_enable(void) {
 	RFFC2071_Write_HalfWord(0x15, RFFC2071_reg[0x15]);
 }
 
-static uint64_t RFFC2071_freq_calc(uint64_t lo_freq_Hz) {
+static uint64_t RFFC2071_freq_calc(uint64_t lo_freq_Hz, uint8_t path, bool calc_result) {
 	uint8_t n_lo = log2(RFFC2071_LO_MAX / lo_freq_Hz);
 	uint8_t lodiv = 1 << n_lo; // 2^n_lo
 	uint64_t fvco = lodiv * lo_freq_Hz;
@@ -124,41 +130,47 @@ static uint64_t RFFC2071_freq_calc(uint64_t lo_freq_Hz) {
 	uint8_t numlsb = (1 << 8) * ((1 << 16) * (n_div - n) - nummsb);
 	// println(n_lo, " ", lodiv, " ", fvco, " ", fbkdiv, " ", n_div, " ", n, " ", nummsb, " ", numlsb);
 
-	/* Path 1 */
+	/* Path 1 TX */
+	if (path == 1) {
+		// p1_freq1
+		RFFC2071_reg[0x0C] &= ~(0x3fff << 2);
+		RFFC2071_reg[0x0C] |= (n << 7) + (n_lo << 4) + ((fbkdiv >> 1) << 2);
+		RFFC2071_Write_HalfWord(0x0C, RFFC2071_reg[0x0C]);
 
-	// p1_freq1
-	RFFC2071_reg[0x0C] &= ~(0x3fff << 2);
-	RFFC2071_reg[0x0C] |= (n << 7) + (n_lo << 4) + ((fbkdiv >> 1) << 2);
-	RFFC2071_Write_HalfWord(0x0C, RFFC2071_reg[0x0C]);
+		// p1_freq2
+		RFFC2071_reg[0x0D] = nummsb;
+		RFFC2071_Write_HalfWord(0x0D, RFFC2071_reg[0x0D]);
 
-	// p1_freq2
-	RFFC2071_reg[0x0D] = nummsb;
-	RFFC2071_Write_HalfWord(0x0D, RFFC2071_reg[0x0D]);
+		// p1_freq3
+		RFFC2071_reg[0x0E] = (numlsb << 8);
+		RFFC2071_Write_HalfWord(0x0E, RFFC2071_reg[0x0E]);
+	}
 
-	// p1_freq3
-	RFFC2071_reg[0x0E] = (numlsb << 8);
-	RFFC2071_Write_HalfWord(0x0E, RFFC2071_reg[0x0E]);
+	/* Path 2 RX */
+	if (path == 2) {
+		// p2_freq1
+		RFFC2071_reg[0x0F] &= ~(0x3fff << 2);
+		RFFC2071_reg[0x0F] |= (n << 7) + (n_lo << 4) + ((fbkdiv >> 1) << 2);
+		RFFC2071_Write_HalfWord(0x0F, RFFC2071_reg[0x0F]);
 
-	/* Path 2 */
+		// p2_freq2
+		RFFC2071_reg[0x10] = nummsb;
+		RFFC2071_Write_HalfWord(0x10, RFFC2071_reg[0x10]);
 
-	// p2_freq1
-	RFFC2071_reg[0x0F] &= ~(0x3fff << 2);
-	RFFC2071_reg[0x0F] |= (n << 7) + (n_lo << 4) + ((fbkdiv >> 1) << 2);
-	RFFC2071_Write_HalfWord(0x0F, RFFC2071_reg[0x0F]);
-
-	// p2_freq2
-	RFFC2071_reg[0x10] = nummsb;
-	RFFC2071_Write_HalfWord(0x10, RFFC2071_reg[0x10]);
-
-	// p2_freq3
-	RFFC2071_reg[0x11] = (numlsb << 8);
-	RFFC2071_Write_HalfWord(0x11, RFFC2071_reg[0x11]);
+		// p2_freq3
+		RFFC2071_reg[0x11] = (numlsb << 8);
+		RFFC2071_Write_HalfWord(0x11, RFFC2071_reg[0x11]);
+	}
 
 	// reset PLL
 	RFFC2071_reg[0x09] = (1 << 3);
 	RFFC2071_Write_HalfWord(0x09, RFFC2071_reg[0x09]);
 
 	// calculate result freq
+	if (!calc_result) {
+		return 0;
+	}
+
 	uint64_t tune_freq_hz = RFFC2071_REF_FREQ * fbkdiv * ((float64_t)n + ((float64_t)((nummsb << 8) | numlsb) / (1 << 24))) / lodiv;
 	return tune_freq_hz;
 }
