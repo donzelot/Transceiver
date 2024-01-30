@@ -6024,7 +6024,7 @@ static void SYSMENU_HANDL_SETTIME(int8_t direction) {
 		addSymbols(ctmp, ctmp, 2, "0", false);
 		LCDDriver_printText(ctmp, LCDDriver_GetCurrentXOffset(), y_pos_clk, COLOR->BUTTON_TEXT, TimeMenuSelection == 4 ? FG_COLOR : BG_COLOR, font_size);
 		LCDDriver_printText(".", LCDDriver_GetCurrentXOffset(), y_pos_clk, COLOR->BUTTON_TEXT, BG_COLOR, font_size);
-		sprintf(ctmp, "20%d", sDate.Year);
+		sprintf(ctmp, "20%02d", sDate.Year);
 		LCDDriver_printText(ctmp, LCDDriver_GetCurrentXOffset(), y_pos_clk, COLOR->BUTTON_TEXT, TimeMenuSelection == 5 ? FG_COLOR : BG_COLOR, font_size);
 
 		LCD_busy = false;
