@@ -578,23 +578,25 @@ void TRX_setFrequency(uint64_t _freq, VFO *vfo) {
 	bool rx1_invert_iq_by_mixer = false;
 	bool rx2_invert_iq_by_mixer = false;
 
-#if HRDW_HAS_I2C_SHARED_BUS && 0
-	uint64_t cur_vfo_freq_mhz = cur_vfo_freq / HZ_IN_MHZ;
-	uint64_t sec_vfo_freq_mhz = sec_vfo_freq / HZ_IN_MHZ;
+#if HRDW_HAS_I2C_SHARED_BUS && HRDW_HAS_VHF_RF_MIXER
+	if (CALIBRATE.VHF_Mixer_Board) {
+		uint64_t cur_vfo_freq_mhz = cur_vfo_freq / HZ_IN_MHZ;
+		uint64_t sec_vfo_freq_mhz = sec_vfo_freq / HZ_IN_MHZ;
 
-	if (cur_vfo_freq_mhz >= RFMIXER_MIN_FREQ_MHz && cur_vfo_freq_mhz <= RFMIXER_MAX_FREQ_MHz) {
-		int64_t lo_freq = cur_vfo_freq + RFMIXER_IF_FREQ;
-		int64_t result_lo_freq = RFMIXER_Freq_Set(lo_freq);
-		int64_t lo_freq_diff = result_lo_freq - lo_freq;
-		cur_vfo_freq = RFMIXER_IF_FREQ + lo_freq_diff;
-		vfo_tx_freq = cur_vfo_freq;
-		rx1_invert_iq_by_mixer = true;
-	} else {
-		RFMIXER_disable();
-	}
+		if (cur_vfo_freq_mhz >= RFMIXER_MIN_FREQ_MHz && cur_vfo_freq_mhz <= RFMIXER_MAX_FREQ_MHz) {
+			int64_t lo_freq = cur_vfo_freq + RFMIXER_IF_FREQ;
+			int64_t result_lo_freq = RFMIXER_Freq_Set(lo_freq);
+			int64_t lo_freq_diff = result_lo_freq - lo_freq;
+			cur_vfo_freq = RFMIXER_IF_FREQ + lo_freq_diff;
+			vfo_tx_freq = cur_vfo_freq;
+			rx1_invert_iq_by_mixer = true;
+		} else {
+			RFMIXER_disable();
+		}
 
-	if (sec_vfo_freq_mhz >= RFMIXER_MIN_FREQ_MHz && sec_vfo_freq_mhz <= RFMIXER_MAX_FREQ_MHz) {
-		rx2_invert_iq_by_mixer = true;
+		if (sec_vfo_freq_mhz >= RFMIXER_MIN_FREQ_MHz && sec_vfo_freq_mhz <= RFMIXER_MAX_FREQ_MHz) {
+			rx2_invert_iq_by_mixer = true;
+		}
 	}
 #endif
 

@@ -78,10 +78,18 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 		att_val -= 0.5f;
 	}
 
+	// Frequencies
+	uint64_t cur_vfo_freq = CurrentVFO->SpectrumCenterFreq;
+	uint64_t sec_vfo_freq = SecondaryVFO->SpectrumCenterFreq;
+	if (CALIBRATE.VHF_Mixer_Board) {
+		cur_vfo_freq = CurrentVFO->Freq;
+		sec_vfo_freq = SecondaryVFO->Freq;
+	}
+
 	// Transverters / External port
 	uint8_t band_out = 0;
-	int8_t band = getBandFromFreq(CurrentVFO->Freq, true);
-	int8_t second_band = getBandFromFreq(SecondaryVFO->Freq, true);
+	int8_t band = getBandFromFreq(cur_vfo_freq, true);
+	int8_t second_band = getBandFromFreq(sec_vfo_freq, true);
 
 	if (TRX.Transverter_1_2cm && band == BANDID_1_2cm) { // 1.2cm
 		band_out = CALIBRATE.EXT_1_2cm;
@@ -158,7 +166,7 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	}
 
 	// ATU
-	if (TRX_Tune && CurrentVFO->Freq <= 70000000) {
+	if (TRX_Tune && cur_vfo_freq <= 70000000) {
 		ATU_Process();
 	}
 
@@ -172,43 +180,43 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	bool tx_lpf_1 = true;
 	bool tx_lpf_2 = true;
 	bool tx_lpf_3 = true;
-	if (CurrentVFO->Freq <= 2000000) { // 160m
+	if (cur_vfo_freq <= 2000000) { // 160m
 		tx_lpf_0 = false;
 		tx_lpf_1 = true;
 		tx_lpf_2 = true;
 		tx_lpf_3 = false;
 	}
-	if (CurrentVFO->Freq > 2000000 && CurrentVFO->Freq <= 5000000) { // 80m
+	if (cur_vfo_freq > 2000000 && cur_vfo_freq <= 5000000) { // 80m
 		tx_lpf_0 = true;
 		tx_lpf_1 = false;
 		tx_lpf_2 = true;
 		tx_lpf_3 = false;
 	}
-	if (CurrentVFO->Freq > 5000000 && CurrentVFO->Freq <= 9000000) { // 40m
+	if (cur_vfo_freq > 5000000 && cur_vfo_freq <= 9000000) { // 40m
 		tx_lpf_0 = false;
 		tx_lpf_1 = false;
 		tx_lpf_2 = false;
 		tx_lpf_3 = false;
 	}
-	if (CurrentVFO->Freq > 9000000 && CurrentVFO->Freq <= 16000000) { // 30m,20m
+	if (cur_vfo_freq > 9000000 && cur_vfo_freq <= 16000000) { // 30m,20m
 		tx_lpf_0 = true;
 		tx_lpf_1 = false;
 		tx_lpf_2 = false;
 		tx_lpf_3 = false;
 	}
-	if (CurrentVFO->Freq > 16000000 && CurrentVFO->Freq <= 22000000) { // 17m,15m
+	if (cur_vfo_freq > 16000000 && cur_vfo_freq <= 22000000) { // 17m,15m
 		tx_lpf_0 = false;
 		tx_lpf_1 = true;
 		tx_lpf_2 = false;
 		tx_lpf_3 = false;
 	}
-	if (CurrentVFO->Freq > 22000000 && CurrentVFO->Freq <= 30000000) { // 12m,CB,10m
+	if (cur_vfo_freq > 22000000 && cur_vfo_freq <= 30000000) { // 12m,CB,10m
 		tx_lpf_0 = true;
 		tx_lpf_1 = true;
 		tx_lpf_2 = false;
 		tx_lpf_3 = false;
 	}
-	if (CurrentVFO->Freq > 30000000 && CurrentVFO->Freq < 60000000) { // 6m+
+	if (cur_vfo_freq > 30000000 && cur_vfo_freq < 60000000) { // 6m+
 		tx_lpf_0 = false;
 		tx_lpf_1 = false;
 		tx_lpf_2 = true;
@@ -216,8 +224,8 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	}
 
 	// Dual RX
-	uint8_t bpf = getBPFByFreq(CurrentVFO->Freq);
-	uint8_t second_bpf = getBPFByFreq(SecondaryVFO->Freq);
+	uint8_t bpf = getBPFByFreq(cur_vfo_freq);
+	uint8_t second_bpf = getBPFByFreq(sec_vfo_freq);
 	bool dualrx_bpf_disabled = TRX.Dual_RX && bpf != second_bpf;
 
 	// BPF/LPF
@@ -228,7 +236,7 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	bool BPF2_A1 = false;
 	bool BPF2_A0 = false;
 
-	if (CurrentVFO->Freq >= 60000000) { // VHF, disabled bpf
+	if (cur_vfo_freq >= 60000000) { // VHF, disabled bpf
 		BPF1_EN = true;
 		BPF1_A1 = false;
 		BPF1_A0 = false;
@@ -296,14 +304,14 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	uint8_t currentAnt = TRX_on_TX ? TRX.ANT_TX : TRX.ANT_RX;
 
 	// VHF_RX
-	bool vhf = CurrentVFO->Freq > 60000000;
+	bool vhf = cur_vfo_freq > 60000000;
 	bool wideband = vhf && band != BANDID_FM && band != BANDID_2m && band != BANDID_70cm && band != BANDID_23cm;
 	bool VHF_RXA = band == BANDID_70cm || band == BANDID_23cm || band == BANDID_FM;
 	bool VHF_RXB = band == BANDID_2m || band == BANDID_23cm;
 	bool VHF_RXC = band == BANDID_FM || wideband;
 
 	// Tuner
-	bool TUNER_Enabled = TRX.TUNER_Enabled && CurrentVFO->Freq < 60000000;
+	bool TUNER_Enabled = TRX.TUNER_Enabled && cur_vfo_freq < 60000000;
 
 	// Update PCF8575 register
 #define PCF8575_ARRAY_SIZE 16
@@ -315,11 +323,11 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	PCF8575_array[2] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && band == BANDID_2m;
 	PCF8575_array[3] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && band == BANDID_23cm;
 	PCF8575_array[4] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && wideband;
-	PCF8575_array[5] = band == BANDID_70cm || band == BANDID_2m;               // D1_V1
-	PCF8575_array[6] = wideband || band == BANDID_2m;                          // D1_V2
-	PCF8575_array[7] = second_band == BANDID_23cm || second_band == BANDID_2m; // D2_V2
+	PCF8575_array[5] = band == BANDID_70cm || band == BANDID_2m; // D1_V1 RX
+	PCF8575_array[6] = wideband || band == BANDID_2m;            // D1_V2 RX
+	PCF8575_array[7] = band == BANDID_23cm || band == BANDID_2m; // D2_V2 TX
 
-	PCF8575_array[8] = second_band == BANDID_70cm || second_band == BANDID_2m; // D2_V1
+	PCF8575_array[8] = band == BANDID_70cm || band == BANDID_2m; // D2_V1 TX
 	PCF8575_array[9] = vhf && TRX.ATT && att_val_16;
 	PCF8575_array[10] = vhf && TRX.ATT && att_val_05;
 	PCF8575_array[11] = vhf && TRX.ATT && att_val_1;
@@ -339,12 +347,17 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	}
 
 	if (!PCF8575_array_equal || clean) {
-		bool res = PCF8575_SetOutputs(PCF8575_value);
+		bool res = true;
+		if (CALIBRATE.VHF_Mixer_Board) {
+			res = PCF8575_SetOutputs(PCF8575_value);
+		}
 
 		if (res) {
 			for (uint8_t i = 0; i < PCF8575_ARRAY_SIZE; i++) {
 				PCF8575_array_old[i] = PCF8575_array[i];
 			}
+		} else {
+			println("[ERR] PCF8575 update error");
 		}
 	}
 
@@ -362,14 +375,14 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	shift_array[57] = VHF_RXA;                          // U19	VHF_RXA
 	shift_array[56] = VHF_RXB;                          // U19	VHF_RXB
 
-	shift_array[55] = !tx_lpf_0;                                                                         // U20 STPIC6C595TTR	HFAMP_B0
-	shift_array[54] = !tx_lpf_1;                                                                         // U20	HFAMP_B1
-	shift_array[53] = !tx_lpf_2;                                                                         // U20	HFAMP_B2
-	shift_array[52] = !tx_lpf_3;                                                                         // U20	HFAMP_B3
-	shift_array[51] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && CurrentVFO->Freq < 60000000; // U20	HF TX
-	shift_array[50] = !(TRX.ATT && att_val_8);                                                           // U20	VHF_ATT8
-	shift_array[49] = !(TRX.ATT && att_val_16);                                                          // U20	VHF_ATT16
-	shift_array[48] = false;                                                                             // U20	FAN (code in bottom)
+	shift_array[55] = !tx_lpf_0;                                                                     // U20 STPIC6C595TTR	HFAMP_B0
+	shift_array[54] = !tx_lpf_1;                                                                     // U20	HFAMP_B1
+	shift_array[53] = !tx_lpf_2;                                                                     // U20	HFAMP_B2
+	shift_array[52] = !tx_lpf_3;                                                                     // U20	HFAMP_B3
+	shift_array[51] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && cur_vfo_freq < 60000000; // U20	HF TX
+	shift_array[50] = !(TRX.ATT && att_val_8);                                                       // U20	VHF_ATT8
+	shift_array[49] = !(TRX.ATT && att_val_16);                                                      // U20	VHF_ATT16
+	shift_array[48] = false;                                                                         // U20	FAN (code in bottom)
 
 	shift_array[47] = currentAnt == TRX_ANT_2;    // U21 STPIC6C595TTR	ANT
 	shift_array[46] = TUNER_Enabled && TRX.ATU_T; // U21	TUNE T
@@ -389,14 +402,14 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	shift_array[33] = TRX_Tune;                                           // U23	EXT TUNE
 	shift_array[32] = false;                                              // U23	EXT Reserved
 
-	shift_array[31] = false;                        // U24 74HC595	Reserved
-	shift_array[30] = CurrentVFO->Freq >= 60000000; // U24	HF/VHF
-	shift_array[29] = false;                        // U24	Reserved
-	shift_array[28] = false;                        // U24	Reserved
-	shift_array[27] = TRX.ATT && att_val_16;        // U24	ATT 16
-	shift_array[26] = TRX.ATT && att_val_05;        // U24	ATT 0.5
-	shift_array[25] = TRX.ATT && att_val_1;         // U24	ATT 1
-	shift_array[24] = TRX.ATT && att_val_2;         // U24	ATT 2
+	shift_array[31] = false;                    // U24 74HC595	Reserved
+	shift_array[30] = cur_vfo_freq >= 60000000; // U24	HF/VHF
+	shift_array[29] = false;                    // U24	Reserved
+	shift_array[28] = false;                    // U24	Reserved
+	shift_array[27] = TRX.ATT && att_val_16;    // U24	ATT 16
+	shift_array[26] = TRX.ATT && att_val_05;    // U24	ATT 0.5
+	shift_array[25] = TRX.ATT && att_val_1;     // U24	ATT 1
+	shift_array[24] = TRX.ATT && att_val_2;     // U24	ATT 2
 
 	shift_array[23] = TRX.ATT && att_val_4; // U22 74HC595	ATT 4
 	shift_array[22] = TRX.ATT && att_val_8; // U22	ATT 8
@@ -512,6 +525,12 @@ void RF_UNIT_ProcessSensors(void) {
 
 	HAL_ADCEx_InjectedPollForConversion(&hadc1, 100); // wait if prev conversion not ended
 
+	// Frequencies
+	uint64_t cur_vfo_freq = CurrentVFO->SpectrumCenterFreq;
+	if (CALIBRATE.VHF_Mixer_Board) {
+		cur_vfo_freq = CurrentVFO->Freq;
+	}
+
 	// THERMAL
 	float32_t rf_thermal = (float32_t)(HAL_ADCEx_InjectedGetValue(&hadc1, ADC_INJECTED_RANK_3)) * TRX_STM32_VREF / B16_RANGE;
 
@@ -576,9 +595,9 @@ void RF_UNIT_ProcessSensors(void) {
 	} else {
 
 		// Transformation ratio of the SWR meter
-		if (CurrentVFO->Freq >= 80000000) {
+		if (cur_vfo_freq >= 80000000) {
 			forward = forward * CALIBRATE.SWR_FWD_Calibration_VHF;
-		} else if (CurrentVFO->Freq >= 40000000) {
+		} else if (cur_vfo_freq >= 40000000) {
 			forward = forward * CALIBRATE.SWR_FWD_Calibration_6M;
 		} else {
 			forward = forward * CALIBRATE.SWR_FWD_Calibration_HF;
@@ -590,9 +609,9 @@ void RF_UNIT_ProcessSensors(void) {
 		if (backward >= 0.05f) // do not measure less than 50mV
 		{
 			// Transformation ratio of the SWR meter
-			if (CurrentVFO->Freq >= 80000000) {
+			if (cur_vfo_freq >= 80000000) {
 				backward = backward * CALIBRATE.SWR_BWD_Calibration_VHF;
-			} else if (CurrentVFO->Freq >= 40000000) {
+			} else if (cur_vfo_freq >= 40000000) {
 				backward = backward * CALIBRATE.SWR_BWD_Calibration_6M;
 			} else {
 				backward = backward * CALIBRATE.SWR_BWD_Calibration_HF;

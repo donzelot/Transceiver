@@ -385,6 +385,7 @@ static void SYSMENU_HANDL_CALIB_ENABLE_AIR_band(int8_t direction);
 static void SYSMENU_HANDL_CALIB_ENABLE_marine_band(int8_t direction);
 static void SYSMENU_HANDL_CALIB_ENABLE_70cm_band(int8_t direction);
 static void SYSMENU_HANDL_CALIB_ENABLE_23cm_band(int8_t direction);
+static void SYSMENU_HANDL_CALIB_VHF_Mixer_Board(int8_t direction);
 static void SYSMENU_HANDL_CALIB_ENCODER2_DEBOUNCE(int8_t direction);
 static void SYSMENU_HANDL_CALIB_ENCODER2_INVERT(int8_t direction);
 static void SYSMENU_HANDL_CALIB_ENCODER2_ON_FALLING(int8_t direction);
@@ -1184,6 +1185,9 @@ const static struct sysmenu_item_handler sysmenu_calibration_handlers[] = {
 #endif
 #if defined(FRONTPANEL_MINI)
     {"RF-Unit Type", SYSMENU_ENUM, NULL, (uint32_t *)&CALIBRATE.RF_unit_type, SYSMENU_HANDL_CALIB_RF_unit_type, (const enumerate_item[2]){"HF", "VHF"}},
+#endif
+#if HRDW_HAS_I2C_SHARED_BUS && HRDW_HAS_VHF_RF_MIXER
+    {"VHF Mixer Board", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.VHF_Mixer_Board, SYSMENU_HANDL_CALIB_VHF_Mixer_Board},
 #endif
     {"ALC Port Enabled", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.ALC_Port_Enabled, SYSMENU_HANDL_CALIB_ALC_Port_Enabled},
     {"ALC Inverted", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.ALC_Inverted_Logic, SYSMENU_HANDL_CALIB_ALC_Inverted_Logic},
@@ -7861,7 +7865,7 @@ static void SYSMENU_HANDL_CALIB_ENABLE_2m_band(int8_t direction) {
 		CALIBRATE.ENABLE_2m_band = false;
 	}
 
-	BAND_SELECTABLE[BANDID_2m] = CALIBRATE.ENABLE_2m_band || TRX.Transverter_2m;
+	BAND_SELECTABLE[BANDID_2m] = CALIBRATE.ENABLE_2m_band || TRX.Transverter_2m || CALIBRATE.VHF_Mixer_Board;
 }
 
 static void SYSMENU_HANDL_CALIB_ENABLE_AIR_band(int8_t direction) {
@@ -7894,7 +7898,7 @@ static void SYSMENU_HANDL_CALIB_ENABLE_70cm_band(int8_t direction) {
 		CALIBRATE.ENABLE_70cm_band = false;
 	}
 
-	BAND_SELECTABLE[BANDID_70cm] = CALIBRATE.ENABLE_70cm_band || TRX.Transverter_70cm;
+	BAND_SELECTABLE[BANDID_70cm] = CALIBRATE.ENABLE_70cm_band || TRX.Transverter_70cm || CALIBRATE.VHF_Mixer_Board;
 }
 
 static void SYSMENU_HANDL_CALIB_ENABLE_23cm_band(int8_t direction) {
@@ -7905,8 +7909,24 @@ static void SYSMENU_HANDL_CALIB_ENABLE_23cm_band(int8_t direction) {
 		CALIBRATE.ENABLE_23cm_band = false;
 	}
 
-	BAND_SELECTABLE[BANDID_23cm] = CALIBRATE.ENABLE_23cm_band || TRX.Transverter_23cm;
+	BAND_SELECTABLE[BANDID_23cm] = CALIBRATE.ENABLE_23cm_band || TRX.Transverter_23cm || CALIBRATE.VHF_Mixer_Board;
 }
+
+#if HRDW_HAS_I2C_SHARED_BUS && HRDW_HAS_VHF_RF_MIXER
+static void SYSMENU_HANDL_CALIB_VHF_Mixer_Board(int8_t direction) {
+	if (direction > 0) {
+		CALIBRATE.VHF_Mixer_Board = true;
+		RFMIXER_Init();
+	}
+	if (direction < 0) {
+		CALIBRATE.VHF_Mixer_Board = false;
+	}
+
+	BAND_SELECTABLE[BANDID_2m] = CALIBRATE.ENABLE_2m_band || TRX.Transverter_2m || CALIBRATE.VHF_Mixer_Board;
+	BAND_SELECTABLE[BANDID_70cm] = CALIBRATE.ENABLE_70cm_band || TRX.Transverter_70cm || CALIBRATE.VHF_Mixer_Board;
+	BAND_SELECTABLE[BANDID_23cm] = CALIBRATE.ENABLE_23cm_band || TRX.Transverter_23cm || CALIBRATE.VHF_Mixer_Board;
+}
+#endif
 
 static void SYSMENU_HANDL_CALIB_TRANSV_OFFSET_Custom(int8_t direction) {
 	CALIBRATE.Transverter_Custom_Offset_MHz += direction;
