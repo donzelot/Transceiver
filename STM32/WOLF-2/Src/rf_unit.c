@@ -323,9 +323,9 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	PCF8575_array[2] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && band == BANDID_2m;
 	PCF8575_array[3] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && band == BANDID_23cm;
 	PCF8575_array[4] = TRX_on_TX && CurrentVFO->Mode != TRX_MODE_LOOPBACK && wideband;
-	PCF8575_array[5] = band == BANDID_70cm || band == BANDID_2m; // D1_V1 RX
-	PCF8575_array[6] = wideband || band == BANDID_2m;            // D1_V2 RX
-	PCF8575_array[7] = band == BANDID_23cm || band == BANDID_2m; // D2_V2 TX
+	PCF8575_array[5] = band == BANDID_70cm || band == BANDID_2m;           // D1_V1 RX
+	PCF8575_array[6] = wideband || band == BANDID_FM || band == BANDID_2m; // D1_V2 RX
+	PCF8575_array[7] = band == BANDID_23cm || band == BANDID_2m;           // D2_V2 TX
 
 	PCF8575_array[8] = band == BANDID_70cm || band == BANDID_2m; // D2_V1 TX
 	PCF8575_array[9] = vhf && TRX.ATT && att_val_16;
