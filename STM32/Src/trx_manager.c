@@ -97,6 +97,7 @@ uint8_t TRX_TX_Harmonic = 1;
 uint8_t TRX_TX_sendZeroes = 0;
 int8_t TRX_MemoryChannelSelected;
 volatile bool TRX_REPEATER_Applied = false;
+uint16_t Volume_Before_Mute = 0;
 
 static uint_fast8_t TRX_TXRXMode = 0; // 0 - undef, 1 - rx, 2 - tx, 3 - txrx
 static bool TRX_SPLIT_Applied = false;
@@ -2078,6 +2079,7 @@ void BUTTONHANDLER_MENUHOLD(uint32_t parameter) {
 }
 
 void BUTTONHANDLER_MUTE(uint32_t parameter) {
+	Volume_Before_Mute = TRX.Volume;
 	TRX.Mute = !TRX.Mute;
 	if (!TRX.Mute) {
 		TRX.AFAmp_Mute = false;

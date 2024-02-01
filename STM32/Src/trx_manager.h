@@ -219,5 +219,6 @@ extern uint8_t TRX_TX_Harmonic;
 extern uint8_t TRX_TX_sendZeroes;
 extern int8_t TRX_MemoryChannelSelected;
 volatile extern bool TRX_REPEATER_Applied;
+extern uint16_t Volume_Before_Mute;
 
 #endif
