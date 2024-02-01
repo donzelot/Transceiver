@@ -1953,6 +1953,7 @@ void BUTTONHANDLER_NOTCH_MANUAL(uint32_t parameter) {
 		CurrentVFO->ManualNotchFilter = false;
 	}
 
+	TRX.ENC2_func_mode = ENC_FUNC_SET_NOTCH;
 	LCD_UpdateQuery.TopButtons = true;
 	LCD_UpdateQuery.StatusInfoGUI = true;
 	NeedReinitNotch = true;

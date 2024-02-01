@@ -82,12 +82,14 @@ static int32_t rx1_line_pos = -1;           // main receiver position on fft
 static int32_t rx2_line_pos = -1;           // secondary receiver position on fft
 static int32_t bw_rx1_line_start = 0;       // BW bar params RX1
 static int32_t bw_rx1_line_center = 0;
-static int32_t rx1_notch_line_pos = 0;
-static int32_t bw_rx1_line_end = 0;   // BW bar params RX1
+static int32_t rx1_notch_line_start = 0;
+static int32_t rx1_notch_line_end = 0;
+static int32_t bw_rx1_line_end = 0;
 static int32_t bw_rx2_line_start = 0; // BW bar params RX2
 static int32_t bw_rx2_line_center = 0;
-static int32_t rx2_notch_line_pos = 0;
-static int32_t bw_rx2_line_end = 0;                        // BW bar params RX2
+static int32_t rx2_notch_line_start = 0;
+static int32_t rx2_notch_line_end = 0;
+static int32_t bw_rx2_line_end = 0;
 static float32_t window_multipliers[FFT_SIZE] = {0};       // coefficients of the selected window function
 static float32_t Hz_in_pixel = 1.0f;                       // current FFT density value
 static uint8_t bandmap_line_tmp[MAX_FFT_PRINT_SIZE] = {0}; // temporary buffer for bandmap draw
@@ -1196,8 +1198,8 @@ bool FFT_printFFT(void) {
 	}
 	int32_t bw_rx1_line_width = 0;
 	int32_t bw_rx2_line_width = 0;
-	rx1_notch_line_pos = 100;
-	rx2_notch_line_pos = 100;
+	int32_t rx1_notch_line_pos = 100;
+	int32_t rx2_notch_line_pos = 100;
 
 	switch (CurrentVFO->Mode) {
 	case TRX_MODE_LSB:
@@ -1254,6 +1256,9 @@ bool FFT_printFFT(void) {
 	default:
 		break;
 	}
+	float32_t half_notch_size = (float32_t)TRX.NOTCH_Filter_width / 2 / Hz_in_pixel * fft_zoom;
+	rx1_notch_line_start = rx1_notch_line_pos - half_notch_size;
+	rx1_notch_line_end = rx1_notch_line_pos + half_notch_size;
 
 	switch (SecondaryVFO->Mode) {
 	case TRX_MODE_LSB:
@@ -1312,6 +1317,8 @@ bool FFT_printFFT(void) {
 	}
 	bw_rx1_line_center = (bw_rx1_line_start + bw_rx1_line_end) / 2;
 	bw_rx2_line_center = (bw_rx2_line_start + bw_rx2_line_end) / 2;
+	rx2_notch_line_start = rx2_notch_line_pos - half_notch_size;
+	rx2_notch_line_end = rx2_notch_line_pos + half_notch_size;
 
 	if (TRX.FFT_Lens) // lens correction
 	{
@@ -1699,16 +1706,18 @@ bool FFT_printFFT(void) {
 	}
 
 	// Show manual Notch filter line
-	if (CurrentVFO->ManualNotchFilter && TRX_on_RX && rx1_notch_line_pos >= 0 && rx1_notch_line_pos < LAYOUT->FFT_PRINT_SIZE) {
+	if (CurrentVFO->ManualNotchFilter && TRX_on_RX && rx1_notch_line_start >= 0 && rx1_notch_line_start < LAYOUT->FFT_PRINT_SIZE && rx1_notch_line_end >= 0 && rx1_notch_line_end < LAYOUT->FFT_PRINT_SIZE) {
 		uint16_t color = palette_fft[fftHeight * 1 / 4];
 		for (uint32_t fft_y = 0; fft_y < BWLinesHeight; fft_y++) {
-			print_output_buffer[fft_y][rx1_notch_line_pos] = color;
+			print_output_buffer[fft_y][rx1_notch_line_start] = color;
+			print_output_buffer[fft_y][rx1_notch_line_end] = color;
 		}
 	}
-	if (SecondaryVFO->ManualNotchFilter && TRX_on_RX && FFT_Show_Sec_VFO && rx2_notch_line_pos >= 0 && rx2_notch_line_pos < LAYOUT->FFT_PRINT_SIZE) {
+	if (SecondaryVFO->ManualNotchFilter && TRX_on_RX && FFT_Show_Sec_VFO && rx2_notch_line_start >= 0 && rx2_notch_line_start < LAYOUT->FFT_PRINT_SIZE && rx2_notch_line_end >= 0 && rx2_notch_line_end < LAYOUT->FFT_PRINT_SIZE) {
 		uint16_t color = palette_fft[fftHeight * 1 / 4];
 		for (uint32_t fft_y = 0; fft_y < BWLinesHeight; fft_y++) {
-			print_output_buffer[fft_y][rx2_notch_line_pos] = color;
+			print_output_buffer[fft_y][rx2_notch_line_start] = color;
+			print_output_buffer[fft_y][rx2_notch_line_end] = color;
 		}
 	}
 
@@ -2146,9 +2155,10 @@ void FFT_ShortBufferPrintFFT(void) {
 			}
 
 			// Show manual Notch filter line
-			if (CurrentVFO->ManualNotchFilter && TRX_on_RX && rx1_notch_line_pos >= 0 && rx1_notch_line_pos < LAYOUT->FFT_PRINT_SIZE) {
+			if (CurrentVFO->ManualNotchFilter && TRX_on_RX && rx1_notch_line_start >= 0 && rx1_notch_line_start < LAYOUT->FFT_PRINT_SIZE && rx1_notch_line_end >= 0 && rx1_notch_line_end < LAYOUT->FFT_PRINT_SIZE) {
 				uint16_t color = palette_fft[fftHeight * 1 / 4];
-				print_output_short_buffer[buff_idx][rx1_notch_line_pos] = color;
+				print_output_short_buffer[buff_idx][rx1_notch_line_start] = color;
+				print_output_short_buffer[buff_idx][rx1_notch_line_end] = color;
 			}
 
 			// Draw RX1 center line
