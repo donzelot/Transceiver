@@ -903,11 +903,11 @@ bool FFT_printFFT(void) {
 	uint16_t tmp = 0;
 	uint16_t fftHeight = GET_FFTHeight;
 	uint16_t wtfHeight = GET_WTFHeight;
-	#if HRDW_HAS_DUAL_RX
+#if HRDW_HAS_DUAL_RX
 	bool FFT_Show_Sec_VFO = TRX.Show_Sec_VFO || TRX.SPLIT_Enabled || TRX.Dual_RX;
-	#else
+#else
 	bool FFT_Show_Sec_VFO = TRX.Show_Sec_VFO || TRX.SPLIT_Enabled;
-	#endif
+#endif
 	uint_fast8_t decoder_offset = 0;
 	if (NeedProcessDecoder) {
 		decoder_offset = LAYOUT->FFT_CWDECODER_OFFSET;
@@ -1706,14 +1706,16 @@ bool FFT_printFFT(void) {
 	}
 
 	// Show manual Notch filter line
-	if (CurrentVFO->ManualNotchFilter && TRX_on_RX && rx1_notch_line_start >= 0 && rx1_notch_line_start < LAYOUT->FFT_PRINT_SIZE && rx1_notch_line_end >= 0 && rx1_notch_line_end < LAYOUT->FFT_PRINT_SIZE) {
+	if (CurrentVFO->ManualNotchFilter && TRX_on_RX && rx1_notch_line_start >= 0 && rx1_notch_line_start < LAYOUT->FFT_PRINT_SIZE && rx1_notch_line_end >= 0 &&
+	    rx1_notch_line_end < LAYOUT->FFT_PRINT_SIZE) {
 		uint16_t color = palette_fft[fftHeight * 1 / 4];
 		for (uint32_t fft_y = 0; fft_y < BWLinesHeight; fft_y++) {
 			print_output_buffer[fft_y][rx1_notch_line_start] = color;
 			print_output_buffer[fft_y][rx1_notch_line_end] = color;
 		}
 	}
-	if (SecondaryVFO->ManualNotchFilter && TRX_on_RX && FFT_Show_Sec_VFO && rx2_notch_line_start >= 0 && rx2_notch_line_start < LAYOUT->FFT_PRINT_SIZE && rx2_notch_line_end >= 0 && rx2_notch_line_end < LAYOUT->FFT_PRINT_SIZE) {
+	if (SecondaryVFO->ManualNotchFilter && TRX_on_RX && FFT_Show_Sec_VFO && rx2_notch_line_start >= 0 && rx2_notch_line_start < LAYOUT->FFT_PRINT_SIZE && rx2_notch_line_end >= 0 &&
+	    rx2_notch_line_end < LAYOUT->FFT_PRINT_SIZE) {
 		uint16_t color = palette_fft[fftHeight * 1 / 4];
 		for (uint32_t fft_y = 0; fft_y < BWLinesHeight; fft_y++) {
 			print_output_buffer[fft_y][rx2_notch_line_start] = color;
@@ -2155,7 +2157,8 @@ void FFT_ShortBufferPrintFFT(void) {
 			}
 
 			// Show manual Notch filter line
-			if (CurrentVFO->ManualNotchFilter && TRX_on_RX && rx1_notch_line_start >= 0 && rx1_notch_line_start < LAYOUT->FFT_PRINT_SIZE && rx1_notch_line_end >= 0 && rx1_notch_line_end < LAYOUT->FFT_PRINT_SIZE) {
+			if (CurrentVFO->ManualNotchFilter && TRX_on_RX && rx1_notch_line_start >= 0 && rx1_notch_line_start < LAYOUT->FFT_PRINT_SIZE && rx1_notch_line_end >= 0 &&
+			    rx1_notch_line_end < LAYOUT->FFT_PRINT_SIZE) {
 				uint16_t color = palette_fft[fftHeight * 1 / 4];
 				print_output_short_buffer[buff_idx][rx1_notch_line_start] = color;
 				print_output_short_buffer[buff_idx][rx1_notch_line_end] = color;
@@ -2229,7 +2232,11 @@ void FFT_ShortBufferPrintFFT(void) {
 static void FFT_3DPrintFFT(void) {
 	uint16_t wtfHeight = GET_WTFHeight;
 	uint16_t fftHeight = GET_FFTHeight;
+#if HRDW_HAS_DUAL_RX
 	bool FFT_Show_Sec_VFO = TRX.Show_Sec_VFO || TRX.SPLIT_Enabled || TRX.Dual_RX;
+#else
+	bool FFT_Show_Sec_VFO = TRX.Show_Sec_VFO || TRX.SPLIT_Enabled;
+#endif
 	uint_fast8_t decoder_offset = 0;
 	if (NeedProcessDecoder) {
 		decoder_offset = LAYOUT->FFT_CWDECODER_OFFSET;

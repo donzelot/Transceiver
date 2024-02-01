@@ -1166,9 +1166,9 @@ void TRX_setFrequencySlowly_Process(void) {
 		TRX_setFrequency(setFreqSlowly_target, vfo);
 		setFreqSlowly_processing = false;
 	}
-	
+
 	LCD_UpdateQuery.FreqInfo = true;
-	
+
 	if (vfo == SecondaryVFO) {
 		NeedWTFRedraw = true;
 	}
@@ -2041,7 +2041,7 @@ void BUTTONHANDLER_SPLIT(uint32_t parameter) {
 	TRX.RIT_Enabled = false;
 	TRX_setFrequency(CurrentVFO->Freq, CurrentVFO);
 	TRX_setFrequency(SecondaryVFO->Freq, SecondaryVFO);
-	
+
 	LCD_UpdateQuery.TopButtons = true;
 	NeedSaveSettings = true;
 	NeedWTFRedraw = true;

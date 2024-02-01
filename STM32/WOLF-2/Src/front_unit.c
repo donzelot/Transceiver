@@ -1153,7 +1153,7 @@ void FRONTPANEL_CheckButton(PERIPH_FrontPanel_Button *button, uint16_t mcp3008_v
 		AF_VOLUME_mcp3008_averaged = AF_VOLUME_mcp3008_averaged * 0.6f + mcp3008_value * 0.4f;
 
 		TRX.Volume = (uint16_t)(MAX_VOLUME_VALUE - AF_VOLUME_mcp3008_averaged);
-		
+
 		if (TRX.Mute && abs(Volume_Before_Mute - TRX.Volume) > (MAX_VOLUME_VALUE / 10)) {
 			BUTTONHANDLER_MUTE(0);
 		}
