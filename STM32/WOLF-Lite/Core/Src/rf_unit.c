@@ -170,7 +170,7 @@ void RF_UNIT_ProcessSensors(void) {
 
 	// Yaesu MH-48
 	for (uint16_t tb = 0; tb < (ARRLENTH(PERIPH_FrontPanel_TANGENT_MH48)); tb++) {
-			FRONTPANEL_CheckButton_MH48(&PERIPH_FrontPanel_TANGENT_MH48[tb], SW1_Voltage, SW2_Voltage);
+			FRONTPANEL_CheckButton_Tangent(&PERIPH_FrontPanel_TANGENT_MH48[tb], SW1_Voltage, SW2_Voltage);
 	}
 
 	HAL_ADCEx_InjectedStart(&hadc3); // start next manual conversion

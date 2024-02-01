@@ -47,7 +47,11 @@ typedef struct {
 	char name[16];
 } PERIPH_FrontPanel_Button;
 
+#if defined(FRONTPANEL_LITE)
 extern PERIPH_FrontPanel_Button PERIPH_FrontPanel_TANGENT_MH48[22];
+#else
+extern PERIPH_FrontPanel_Button PERIPH_FrontPanel_TANGENT_MH48[6];
+#endif
 extern PERIPH_FrontPanel_Button PERIPH_FrontPanel_Buttons[];
 extern const PERIPH_FrontPanel_FuncButton PERIPH_FrontPanel_FuncButtonsList[FUNCBUTTONS_COUNT];
 extern bool FRONTPanel_MCP3008_1_Enabled;
@@ -59,7 +63,7 @@ extern int8_t FRONTPANEL_ProcessEncoder2;
 extern void FRONTPANEL_Init(void);
 extern void FRONTPANEL_Process(void);
 extern void FRONTPANEL_CheckButton(PERIPH_FrontPanel_Button *button, uint16_t mcp3008_value);
-extern void FRONTPANEL_CheckButton_MH48(PERIPH_FrontPanel_Button *button, uint16_t SW1_value, uint16_t SW2_value );
+extern void FRONTPANEL_CheckButton_Tangent(PERIPH_FrontPanel_Button *button, uint16_t SW1_value, uint16_t SW2_value );
 extern void FRONTPANEL_ENCODER_Rotated(float32_t direction);
 extern void FRONTPANEL_ENC2SW_validate();
 extern void FRONTPANEL_check_ENC2SW(bool state);
