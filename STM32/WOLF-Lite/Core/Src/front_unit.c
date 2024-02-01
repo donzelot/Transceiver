@@ -301,73 +301,293 @@ const PERIPH_FrontPanel_FuncButton PERIPH_FrontPanel_FuncButtonsList[FUNCBUTTONS
     {.name = "NONE", .work_in_menu = false, .clickHandler = NULL, .holdHandler = NULL, .checkBool = NULL},
 };
 
-PERIPH_FrontPanel_Button PERIPH_FrontPanel_TANGENT_MH48[6] = {
+PERIPH_FrontPanel_Button PERIPH_FrontPanel_TANGENT_MH48[22] = {
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 5,
+     .tres_max = 50,
+     .tres2_min = 1090,
+     .tres2_max = 1290,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_1,
+     .holdHandler = BUTTONHANDLER_1}, // MH48 - 1  
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 5,
+     .tres_max = 50,
+     .tres2_min = 1800,
+     .tres2_max = 2000,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_2,
+     .holdHandler = BUTTONHANDLER_2}, // MH48 - 2  
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 5,
+     .tres_max = 50,
+     .tres2_min = 2300,
+     .tres2_max = 2500,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_3,
+     .holdHandler = BUTTONHANDLER_3}, // MH48 - 3  
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 900,
+     .tres_max = 1150,
+     .tres2_min = 1050,
+     .tres2_max = 1300,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_4,
+     .holdHandler = BUTTONHANDLER_4}, // MH48 - 4  
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 900,
+     .tres_max = 1150,
+     .tres2_min = 1750,
+     .tres2_max = 2000,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_5,
+     .holdHandler = BUTTONHANDLER_5}, // MH48 - 5  
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 900,
+     .tres_max = 1150,
+     .tres2_min = 2300,
+     .tres2_max = 2600,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_6,
+     .holdHandler = BUTTONHANDLER_6}, // MH48 - 6  
     {.port = 1,
      .channel = 1,
      .type = FUNIT_CTRL_BUTTON,
      .tres_min = 1700,
-     .tres_max = 2200,
+     .tres_max = 2000,
+     .tres2_min = 1050,
+     .tres2_max = 1300,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_7,
+     .holdHandler = BUTTONHANDLER_7}, // MH48 - 7  
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 1700,
+     .tres_max = 2000,
+     .tres2_min = 1800,
+     .tres2_max = 2000,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_8,
+     .holdHandler = BUTTONHANDLER_8}, // MH48 - 8  
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 1700,
+     .tres_max = 2000,
+     .tres2_min = 2300,
+     .tres2_max = 2600,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_9,
+     .holdHandler = BUTTONHANDLER_9}, // MH48 - 9  
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 2300,
+     .tres_max = 2600,
+     .tres2_min = 1750,
+     .tres2_max = 2000,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_0,
+     .holdHandler = BUTTONHANDLER_0}, // MH48 - 0  
+   {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 2300,
+     .tres_max = 2600,
+     .tres2_min = 1050,
+     .tres2_max = 1300,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_STAR,
+     .holdHandler = BUTTONHANDLER_STAR}, // MH48 - *  
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 2300,
+     .tres_max = 2600,
+     .tres2_min = 2300,
+     .tres2_max = 2600,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_JAIL,
+     .holdHandler = BUTTONHANDLER_JAIL}, // MH48 - #  
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 5,
+     .tres_max = 50,
+     .tres2_min = 2800,
+     .tres2_max = 3000,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_A,
+     .holdHandler = BUTTONHANDLER_A}, // MH48 - A  
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 900,
+     .tres_max = 1150,
+     .tres2_min = 2800,
+     .tres2_max = 3000,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_B,
+     .holdHandler = BUTTONHANDLER_B}, // MH48 - B  
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 1700,
+     .tres_max = 2000,
+     .tres2_min = 2800,
+     .tres2_max = 3000,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_C,
+     .holdHandler = BUTTONHANDLER_C}, // MH48 - C  
+    {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 2300,
+     .tres_max = 2500,
+     .tres2_min = 2800,
+     .tres2_max = 3000,			
+     .state = false,
+     .prev_state = false,
+     .work_in_menu = false,
+     .parameter = 0,
+     .clickHandler = BUTTONHANDLER_D,
+     .holdHandler = BUTTONHANDLER_D}, // MH48 - D  
+	  {.port = 1,
+     .channel = 1,
+     .type = FUNIT_CTRL_BUTTON,
+     .tres_min = 1750,
+     .tres_max = 2100,
+     .tres2_min = 190,
+     .tres2_max = 300,			
      .state = false,
      .prev_state = false,
      .work_in_menu = false,
      .parameter = 0,
      .clickHandler = BUTTONHANDLER_DOWN,
-     .holdHandler = BUTTONHANDLER_DOWN}, // PTT_SW1 - DOWN 1908 200
+     .holdHandler = BUTTONHANDLER_DOWN}, // MH48 - DOWN 
     {.port = 1,
      .channel = 1,
      .type = FUNIT_CTRL_BUTTON,
-     .tres_min = 1000,
-     .tres_max = 1400,
+     .tres_min = 1100,
+     .tres_max = 1300,
+     .tres2_min = 190,
+     .tres2_max = 300,				
      .state = false,
      .prev_state = false,
      .work_in_menu = false,
      .parameter = 0,
      .clickHandler = BUTTONHANDLER_UP,
-     .holdHandler = BUTTONHANDLER_UP}, // PTT_SW1 - UP 1163 200
+     .holdHandler = BUTTONHANDLER_UP}, // MH48 - UP 
     {.port = 1,
      .channel = 2,
      .type = FUNIT_CTRL_BUTTON,
-     .tres_min = 1000,
-     .tres_max = 1450,
+     .tres_min = 2700,
+     .tres_max = 2900,
+     .tres2_min = 1050,
+     .tres2_max = 1300,				
      .state = false,
      .prev_state = false,
      .work_in_menu = false,
      .parameter = 0,
      .clickHandler = BUTTONHANDLER_TUNE,
-     .holdHandler = BUTTONHANDLER_TUNER}, // PTT_SW2 - P1 3000 1300
+     .holdHandler = BUTTONHANDLER_TUNER}, // MH48 - P1 
     {.port = 1,
      .channel = 2,
      .type = FUNIT_CTRL_BUTTON,
-     .tres_min = 1500,
-     .tres_max = 2050,
+     .tres_min = 2700,
+     .tres_max = 2900,
+     .tres2_min = 1750,
+     .tres2_max = 2050,				
      .state = false,
      .prev_state = false,
      .work_in_menu = false,
      .parameter = 0,
      .clickHandler = BUTTONHANDLER_AsB,
-     .holdHandler = BUTTONHANDLER_ArB}, // PTT_SW2 - P2 3000 2050
+     .holdHandler = BUTTONHANDLER_ArB}, // MH48 - P2 
     {.port = 1,
      .channel = 2,
      .type = FUNIT_CTRL_BUTTON,
-     .tres_min = 2300,
-     .tres_max = 2600,
+     .tres_min = 2700,
+     .tres_max = 2900,
+     .tres2_min = 2300,
+     .tres2_max = 2600,				
      .state = false,
      .prev_state = false,
      .work_in_menu = false,
      .parameter = 0,
      .clickHandler = BUTTONHANDLER_BAND_N,
-     .holdHandler = BUTTONHANDLER_MODE_N}, // PTT_SW2 - P3 3000 2600
+     .holdHandler = BUTTONHANDLER_MODE_N}, // MH48 - P3 
     {.port = 1,
      .channel = 2,
      .type = FUNIT_CTRL_BUTTON,
      .tres_min = 2700,
-     .tres_max = 3100,
+     .tres_max = 2900,
+     .tres2_min = 2800,
+     .tres2_max = 3100,				
      .state = false,
      .prev_state = false,
      .work_in_menu = false,
      .parameter = 0,
      .clickHandler = BUTTONHANDLER_BAND_P,
-     .holdHandler = BUTTONHANDLER_MODE_P}, // PTT_SW2 - P4 3000 3050
+     .holdHandler = BUTTONHANDLER_MODE_P}, // MH48 - P4 
 };
 
 void FRONTPANEL_ENCODER_Rotated(float32_t direction) // rotated encoder, handler here, direction -1 - left, 1 - right
@@ -880,7 +1100,7 @@ void FRONTPANEL_Process(void) {
 			}
 		}
 
-		// TANGENT
+		// TANGENT 
 		if (button->type == FUNIT_CTRL_TANGENT) {
 			// Yaesu MH-48
 			if (CALIBRATE.TangentType == TANGENT_MH48) {
@@ -902,6 +1122,61 @@ void FRONTPANEL_Process(void) {
 		}
 	}
 }
+
+void FRONTPANEL_CheckButton_MH48(PERIPH_FrontPanel_Button *button, uint16_t SW1_value, uint16_t SW2_value ) {
+	// MH-48 BUTTONS
+	if (button->type == FUNIT_CTRL_BUTTON) {
+		// set state
+if ((SW1_value > button->tres_min && SW1_value < button->tres_max) && (SW2_value > button->tres2_min && SW2_value < button->tres2_max)) {
+			TRX_Inactive_Time = 0;
+			button->state = true;
+			if (TRX.Debug_Type == TRX_DEBUG_BUTTONS) {
+//				println("Button pressed:  SW1_value: ", SW1_value, " SW2_value: ", SW2_value );
+			}
+		} else {
+			button->state = false;
+		}
+
+		// check state
+		if ((button->prev_state != button->state) && button->state) {
+			button->start_hold_time = HAL_GetTick();
+			button->afterhold = false;
+		}
+
+		// check hold state
+		if ((button->prev_state == button->state) && button->state && ((HAL_GetTick() - button->start_hold_time) > KEY_HOLD_TIME) && !button->afterhold) {
+			button->afterhold = true;
+			if (!LCD_systemMenuOpened || button->work_in_menu) {
+				if (!LCD_window.opened) {
+					if (button->holdHandler != NULL) {
+						CODEC_Beep();
+						button->holdHandler(button->parameter);
+					}
+				} else {
+					LCD_closeWindow();
+				}
+			}
+		}
+
+		// check click state
+		if ((button->prev_state != button->state) && !button->state && ((HAL_GetTick() - button->start_hold_time) < KEY_HOLD_TIME) && !button->afterhold && !TRX.Locked) {
+			if (!LCD_systemMenuOpened || button->work_in_menu) {
+				if (!LCD_window.opened) {
+					if (button->clickHandler != NULL) {
+						CODEC_Beep();
+						button->clickHandler(button->parameter);
+					}
+				} else {
+					LCD_closeWindow();
+				}
+			}
+		}
+
+		// save prev state
+		button->prev_state = button->state;
+	}		
+}
+
 
 void FRONTPANEL_CheckButton(PERIPH_FrontPanel_Button *button, uint16_t mcp3008_value) {
 	// PTT
