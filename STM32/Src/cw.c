@@ -107,7 +107,7 @@ void CW_key_change(void) {
 		}
 
 		// do tx
-		if (CW_key_dot_hard == true && (KEYER_symbol_status == 0 || !TRX.CW_KEYER)) {
+		if (CW_key_dot_hard == true && (KEYER_symbol_status == 0 || !(TRX.CW_KEYER || CW_Process_Macros))) {
 			CW_updateEstimateTimeout();
 			FPGA_NeedSendParams = true;
 			TRX_Restart_Mode();
@@ -155,7 +155,7 @@ void CW_key_change(void) {
 		}
 
 		// do tx
-		if (CW_key_dash_hard == true && (KEYER_symbol_status == 0 || !TRX.CW_KEYER)) {
+		if (CW_key_dash_hard == true && (KEYER_symbol_status == 0 || !(TRX.CW_KEYER || CW_Process_Macros))) {
 			CW_updateEstimateTimeout();
 			FPGA_NeedSendParams = true;
 			TRX_Restart_Mode();
@@ -206,7 +206,7 @@ float32_t CW_GenerateSignal(float32_t power) {
 	}
 
 	// Keyer disabled
-	if (!TRX.CW_KEYER) {
+	if (!(TRX.CW_KEYER || CW_Process_Macros)) {
 		KEYER_symbol_status = 0;
 
 		if (!CW_key_serial && !CW_key_dot_hard && !CW_key_dash_hard) {
