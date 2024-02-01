@@ -2698,7 +2698,7 @@ void LCD_processHoldTouch(uint16_t x, uint16_t y) {
 	}
 
 	// Free Tune / Center
-	if (y > LAYOUT->FFT_FFTWTF_POS_Y && y <= (LAYOUT->FFT_FFTWTF_POS_Y + FFT_AND_WTF_HEIGHT - 50) && x > 0 && x < LCD_WIDTH && !TRX.SPLIT_Enabled) {
+	if (y > LAYOUT->FFT_FFTWTF_POS_Y && y <= (LAYOUT->FFT_FFTWTF_POS_Y + FFT_AND_WTF_HEIGHT - 50) && x > 0 && x < LCD_WIDTH) {
 		if (!LCD_systemMenuOpened) {
 			BUTTONHANDLER_Free_tune(0);
 			LCD_redraw(false);
@@ -2731,6 +2731,9 @@ bool LCD_processSwipeTouch(uint16_t x, uint16_t y, int16_t dx, int16_t dy) {
 		if (dx > -slowler && dx < slowler) {
 			return false;
 		}
+		if (TRX.SPLIT_Enabled && TRX.SplitModeType == SPLIT_MODE_CROSSBAND) {
+			return true;
+		}
 
 		float64_t step = TRX.FRQ_STEP_SSB_Hz;
 		if (vfo->Mode == TRX_MODE_CW) {
@@ -2762,6 +2765,10 @@ bool LCD_processSwipeTouch(uint16_t x, uint16_t y, int16_t dx, int16_t dy) {
 		}
 
 		TRX_setFrequency(newfreq, vfo);
+		if (vfo == SecondaryVFO) {
+			NeedWTFRedraw = true;
+		}
+
 		LCD_UpdateQuery.FreqInfo = true;
 		return true;
 	}

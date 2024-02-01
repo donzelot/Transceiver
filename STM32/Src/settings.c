@@ -226,12 +226,12 @@ void LoadSettings(bool clear) {
 		TRX.Auto_Snap = false;                     // Auto track and snap to signal frequency
 		TRX.Full_Duplex = false;                   // Full Duplex TX+RX Mode
 		TRX.Digital_Pre_Distortion = false;        // enable digital pre-distortion
-		TRX.Split_Mode_Sync_Freq = false;          // enable VFO freq syncronization in SPLIT mode
 		TRX.FT8_Auto_CQ = false;                   // Auto-CQ mode for FT8
 		TRX.DXCluster_Type = DX_CLUSTER_DX_SUMMIT; // DX cluster type
 		TRX.REPEATER_Offset = -600;                // repeater mode custom offset
 		TRX.WOLF_Cluster = true;                   // Enable WOLF cluster
 		TRX.FREE_Tune = false;                     // Enable free tune on spectrum bandwidth
+		TRX.SplitModeType = SPLIT_MODE_DX;         // split mode type (free / dx / crossband)
 		// AUDIO
 		TRX.Volume = 25;                                               // AF Volume
 		TRX.Volume_Step = 5;                                           // AF Volume step by sec encoder

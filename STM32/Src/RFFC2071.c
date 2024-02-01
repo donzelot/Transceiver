@@ -14,6 +14,7 @@ static void RFFC2071_SDA_IN(I2C_DEVICE *dev);
 static uint16_t RFFC2071_Read_HalfWord(uint8_t reg_addr);
 static void RFFC2071_Write_HalfWord(uint8_t reg_addr, uint16_t value);
 static uint64_t RFFC2071_freq_calc(uint64_t lo_MHz, uint8_t path, bool calc_result);
+static bool RFFC2071_disabled = false;
 
 uint16_t RFFC2071_reg[RFFC2071_REGS_NUM] = {
     0xbefa, /* 00 LF - Loop Filter Configuration */
@@ -74,12 +75,18 @@ void RFMIXER_Init(void) {
 }
 
 void RFMIXER_disable(void) {
+	if (RFFC2071_disabled) {
+		return;
+	}
+
 	// clear ENBL BIT
 	RFFC2071_reg[0x15] &= ~(1 << 14);
 	RFFC2071_Write_HalfWord(0x15, RFFC2071_reg[0x15]);
 
 	RFFC2071_lo_freq_Hz_RX_prev = 0;
 	RFFC2071_lo_freq_Hz_TX_prev = 0;
+
+	RFFC2071_disabled = true;
 }
 
 uint64_t RFMIXER_Freq_Set(uint64_t RX_lo_freq_Hz, uint64_t TX_lo_freq_Hz) {
@@ -104,6 +111,8 @@ void RFMIXER_enable(void) {
 	// set ENBL BIT
 	RFFC2071_reg[0x15] |= (1 << 14);
 	RFFC2071_Write_HalfWord(0x15, RFFC2071_reg[0x15]);
+
+	RFFC2071_disabled = false;
 }
 
 static uint64_t RFFC2071_freq_calc(uint64_t lo_freq_Hz, uint8_t path, bool calc_result) {

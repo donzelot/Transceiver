@@ -50,7 +50,6 @@ static void SYSMENU_HANDL_TRX_RIT_INTERVAL(int8_t direction);
 static void SYSMENU_HANDL_TRX_SetCallsign(int8_t direction);
 static void SYSMENU_HANDL_TRX_SetLocator(int8_t direction);
 static void SYSMENU_HANDL_TRX_SetURSICode(int8_t direction);
-static void SYSMENU_HANDL_TRX_Split_Mode_Sync_Freq(int8_t direction);
 static void SYSMENU_HANDL_TRX_TROPO_Region(int8_t direction);
 static void SYSMENU_HANDL_TRX_TRANSV_13CM(int8_t direction);
 static void SYSMENU_HANDL_TRX_TRANSV_23CM(int8_t direction);
@@ -62,6 +61,7 @@ static void SYSMENU_HANDL_TRX_TRANSV_2M(int8_t direction);
 static void SYSMENU_HANDL_TRX_TRANSV_ENABLE(int8_t direction);
 static void SYSMENU_HANDL_TRX_TRANSV_QO100(int8_t direction);
 static void SYSMENU_HANDL_TRX_XIT_INTERVAL(int8_t direction);
+static void SYSMENU_HANDL_TRX_SplitModeType(int8_t direction);
 
 static void SYSMENU_HANDL_FILTER_AMFM_LPF_Stages(int8_t direction);
 static void SYSMENU_HANDL_FILTER_CW_GaussFilter(int8_t direction);
@@ -729,12 +729,12 @@ const static struct sysmenu_item_handler sysmenu_trx_handlers[] = {
     {"Notch Step, Hz", SYSMENU_FLOAT32, NULL, (uint32_t *)&TRX.NOTCH_STEP_Hz, SYSMENU_HANDL_TRX_NOTCH_STEP_Hz},
     {"Full Duplex", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.Full_Duplex, SYSMENU_HANDL_TRX_Full_Duplex},
     {"Locator", SYSMENU_RUN, NULL, 0, SYSMENU_HANDL_TRX_SetLocator},
+    {"SPLIT type", SYSMENU_ENUM, NULL, (uint32_t *)&TRX.SplitModeType, SYSMENU_HANDL_TRX_SplitModeType, (const enumerate_item[3]){"Free", "DX", "CrossBnd"}},
     {"RIT Interval", SYSMENU_UINT16, NULL, (uint32_t *)&TRX.RIT_INTERVAL, SYSMENU_HANDL_TRX_RIT_INTERVAL},
     {"XIT Interval", SYSMENU_UINT16, NULL, (uint32_t *)&TRX.XIT_INTERVAL, SYSMENU_HANDL_TRX_XIT_INTERVAL},
 #if !defined(FRONTPANEL_LITE) && !defined(FRONTPANEL_X1) && !defined(FRONTPANEL_WOLF_2)
     {"Fine RIT Tune", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.FineRITTune, SYSMENU_HANDL_TRX_FineRITTune},
 #endif
-    {"Split freq sync", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.Split_Mode_Sync_Freq, SYSMENU_HANDL_TRX_Split_Mode_Sync_Freq},
     {"Transverter 2m", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.Transverter_2m, SYSMENU_HANDL_TRX_TRANSV_2M},
     {"Transverter 70cm", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.Transverter_70cm, SYSMENU_HANDL_TRX_TRANSV_70CM},
     {"Transverter 23cm", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.Transverter_23cm, SYSMENU_HANDL_TRX_TRANSV_23CM},
@@ -1751,15 +1751,6 @@ static void SYSMENU_HANDL_TRX_FineRITTune(int8_t direction) {
 	}
 }
 
-static void SYSMENU_HANDL_TRX_Split_Mode_Sync_Freq(int8_t direction) {
-	if (direction > 0) {
-		TRX.Split_Mode_Sync_Freq = true;
-	}
-	if (direction < 0) {
-		TRX.Split_Mode_Sync_Freq = false;
-	}
-}
-
 static void SYSMENU_HANDL_TRX_Full_Duplex(int8_t direction) {
 	if (direction > 0) {
 		TRX.Full_Duplex = true;
@@ -1775,6 +1766,15 @@ static void SYSMENU_HANDL_TRX_DEBUG_TYPE(int8_t direction) {
 	}
 	if (TRX.Debug_Type > 6) {
 		TRX.Debug_Type = 6;
+	}
+}
+
+static void SYSMENU_HANDL_TRX_SplitModeType(int8_t direction) {
+	if (direction > 0 || TRX.SplitModeType > 0) {
+		TRX.SplitModeType += direction;
+	}
+	if (TRX.SplitModeType > 2) {
+		TRX.SplitModeType = 2;
 	}
 }
 

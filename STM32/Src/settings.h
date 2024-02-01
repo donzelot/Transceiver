@@ -16,7 +16,7 @@
 #define FPGA_VERSION_STR "8.2.0" // needed FPGA version Wolf/Wolf-2/Wolf-X1
 #endif
 
-#define SETT_VERSION 152        // Settings config version
+#define SETT_VERSION 153        // Settings config version
 #define CALIB_VERSION 93        // Calibration config version
 #define WIFI_SETTINGS_VERSION 5 // WiFi config version
 
@@ -486,6 +486,13 @@ typedef enum {
 	NAV_BUTTONS_EDGES,
 } BOTTOM_NAV_BUTTONS_TYPE;
 
+// Split mode type
+typedef enum {
+	SPLIT_MODE_FREE,
+	SPLIT_MODE_DX,
+	SPLIT_MODE_CROSSBAND,
+} SPLIT_MODE_TYPE;
+
 // ANT select
 typedef enum {
 	TRX_ANT_1,
@@ -742,6 +749,7 @@ extern struct TRX_SETTINGS {
 	ENC2_FUNC_MODE ENC2_func_mode;
 	FFT_AUTOMATIC_TYPE FFT_Automatic_Type;
 	BOTTOM_NAV_BUTTONS_TYPE BottomNavigationButtons;
+	SPLIT_MODE_TYPE SplitModeType;
 #if HRDW_HAS_DUAL_RX
 	DUAL_RX_TYPE Dual_RX_Type;
 #endif
@@ -780,7 +788,6 @@ extern struct TRX_SETTINGS {
 	bool Auto_Snap;
 	bool Full_Duplex;
 	bool Digital_Pre_Distortion;
-	bool Split_Mode_Sync_Freq;
 	bool FT8_Auto_CQ;
 	bool Mute;
 	bool AFAmp_Mute;

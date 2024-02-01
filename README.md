@@ -149,9 +149,9 @@ WiFi module ESP-01 must have fresh firmware with SDK 3.0.4 and higher, and AT co
 * **Notch Step** - Frequency step of manual notch filter
 * **Full Duplex** - Full duplex RX+TX mode
 * **Locator** - User QTH locator
+* **SPLIT type** - In DX mode - the TX frequency is controlled, in the CrossBand mode synchronously for two VFOs, for Free only the RX frequency changes
 * **RIT Interval** - Offset range RIT (+ -)
 * **XIT Interval** - Offset range XIT (+ -)
-* **Split freq sync** - Synchronous VFO frequency change in SPLIT mode
 * **Transverter XXcm** - Enable external ham band transverter support
 * **URSI Code** - Ionogramm URSI Code https://digisonde.com/index.html#stationmap-section
 * **Tropo Region** - Region for tropospheric forecast https://www.dxinfocentre.com/tropo.html 

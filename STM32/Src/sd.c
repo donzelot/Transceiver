@@ -1056,12 +1056,12 @@ static void SDCOMM_EXPORT_SETTINGS_handler(void) {
 			SD_WRITE_SETT_LINE("TRX.NOTCH_STEP_Hz", (uint64_t *)&TRX.NOTCH_STEP_Hz, SYSMENU_FLOAT32);
 			SD_WRITE_SETT_LINE("TRX.Debug_Type", (uint64_t *)&TRX.Debug_Type, SYSMENU_UINT8);
 			SD_WRITE_SETT_LINE("TRX.DXCluster_Type", (uint64_t *)&TRX.DXCluster_Type, SYSMENU_UINT8);
+			SD_WRITE_SETT_LINE("TRX.SplitModeType", (uint64_t *)&TRX.SplitModeType, SYSMENU_UINT8);
 			SD_WRITE_SETT_LINE("TRX.BandMapEnabled", (uint64_t *)&TRX.BandMapEnabled, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.InputType_MAIN", (uint64_t *)&TRX.InputType_MAIN, SYSMENU_UINT8);
 			SD_WRITE_SETT_LINE("TRX.InputType_DIGI", (uint64_t *)&TRX.InputType_DIGI, SYSMENU_UINT8);
 			SD_WRITE_SETT_LINE("TRX.AutoGain", (uint64_t *)&TRX.AutoGain, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.SPLIT_Enabled", (uint64_t *)&TRX.SPLIT_Enabled, SYSMENU_BOOLEAN);
-			SD_WRITE_SETT_LINE("TRX.Split_Mode_Sync_Freq", (uint64_t *)&TRX.Split_Mode_Sync_Freq, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.WOLF_Cluster", (uint64_t *)&TRX.WOLF_Cluster, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.FREE_Tune", (uint64_t *)&TRX.FREE_Tune, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.FT8_Auto_CQ", (uint64_t *)&TRX.FT8_Auto_CQ, SYSMENU_BOOLEAN);
@@ -1864,6 +1864,9 @@ static void SDCOMM_PARSE_SETTINGS_LINE(char *line) {
 	if (strcmp(name, "TRX.DXCluster_Type") == 0) {
 		TRX.DXCluster_Type = (uint8_t)uintval;
 	}
+	if (strcmp(name, "TRX.SplitModeType") == 0) {
+		TRX.SplitModeType = (uint8_t)uintval;
+	}
 	if (strcmp(name, "TRX.BandMapEnabled") == 0) {
 		TRX.BandMapEnabled = bval;
 	}
@@ -1878,9 +1881,6 @@ static void SDCOMM_PARSE_SETTINGS_LINE(char *line) {
 	}
 	if (strcmp(name, "TRX.SPLIT_Enabled") == 0) {
 		TRX.SPLIT_Enabled = bval;
-	}
-	if (strcmp(name, "TRX.Split_Mode_Sync_Freq") == 0) {
-		TRX.Split_Mode_Sync_Freq = bval;
 	}
 	if (strcmp(name, "TRX.WOLF_Cluster") == 0) {
 		TRX.WOLF_Cluster = bval;

@@ -674,7 +674,7 @@ void TRX_setFrequency(uint64_t _freq, VFO *vfo) {
 	ATU_Load_Memory(TRX_on_TX ? TRX.ANT_TX : TRX.ANT_RX, CurrentVFO->Freq);
 
 	// SPLIT freq secondary VFO sync
-	if (TRX.Split_Mode_Sync_Freq && TRX.SPLIT_Enabled && vfo == CurrentVFO) {
+	if (TRX.SPLIT_Enabled && TRX.SplitModeType == SPLIT_MODE_CROSSBAND && vfo == CurrentVFO) {
 		TRX_setFrequency(SecondaryVFO->Freq + freq_diff, SecondaryVFO);
 	}
 
@@ -1157,7 +1157,7 @@ void TRX_setFrequencySlowly_Process(void) {
 		return;
 	}
 
-	VFO *vfo = TRX.SPLIT_Enabled ? SecondaryVFO : CurrentVFO;
+	VFO *vfo = (TRX.SPLIT_Enabled && TRX.SplitModeType == SPLIT_MODE_DX) ? SecondaryVFO : CurrentVFO;
 
 	int64_t diff = vfo->Freq - setFreqSlowly_target;
 	if (diff > TRX_SLOW_SETFREQ_MIN_STEPSIZE || diff < -TRX_SLOW_SETFREQ_MIN_STEPSIZE) {
@@ -1175,12 +1175,13 @@ void TRX_setFrequencySlowly_Process(void) {
 }
 
 void TRX_DoFrequencyEncoder(float32_t direction, bool secondary_encoder) {
-	float64_t newfreq = (float64_t)CurrentVFO->Freq;
+	VFO *vfo = (TRX.SPLIT_Enabled && TRX.SplitModeType == SPLIT_MODE_DX) ? SecondaryVFO : CurrentVFO;
+	float64_t newfreq = (float64_t)vfo->Freq;
 	float64_t step;
 
-	if (TRX.ChannelMode && getBandFromFreq(CurrentVFO->Freq, false) != -1 && BANDS[getBandFromFreq(CurrentVFO->Freq, false)].channelsCount > 0) {
-		int_fast8_t band = getBandFromFreq(CurrentVFO->Freq, false);
-		int_fast16_t channel = getChannelbyFreq(CurrentVFO->Freq, false);
+	if (TRX.ChannelMode && getBandFromFreq(vfo->Freq, false) != -1 && BANDS[getBandFromFreq(vfo->Freq, false)].channelsCount > 0) {
+		int_fast8_t band = getBandFromFreq(vfo->Freq, false);
+		int_fast16_t channel = getChannelbyFreq(vfo->Freq, false);
 		int_fast16_t new_channel = channel + direction;
 		if (new_channel < 0) {
 			new_channel = BANDS[band].channelsCount - 1;
@@ -1200,19 +1201,19 @@ void TRX_DoFrequencyEncoder(float32_t direction, bool secondary_encoder) {
 	} else {
 		bool air_step = false;
 		step = TRX.FRQ_STEP_SSB_Hz;
-		if (CurrentVFO->Mode == TRX_MODE_CW) {
+		if (vfo->Mode == TRX_MODE_CW) {
 			step = (float64_t)TRX.FRQ_STEP_CW_Hz;
 		}
-		if (CurrentVFO->Mode == TRX_MODE_DIGI_L || CurrentVFO->Mode == TRX_MODE_DIGI_U || CurrentVFO->Mode == TRX_MODE_RTTY) {
+		if (vfo->Mode == TRX_MODE_DIGI_L || vfo->Mode == TRX_MODE_DIGI_U || vfo->Mode == TRX_MODE_RTTY) {
 			step = (float64_t)TRX.FRQ_STEP_DIGI_Hz;
 		}
-		if (CurrentVFO->Mode == TRX_MODE_WFM) {
+		if (vfo->Mode == TRX_MODE_WFM) {
 			step = (float64_t)TRX.FRQ_STEP_WFM_Hz;
 		}
-		if (CurrentVFO->Mode == TRX_MODE_NFM) {
+		if (vfo->Mode == TRX_MODE_NFM) {
 			step = (float64_t)TRX.FRQ_STEP_FM_Hz;
 		}
-		if (CurrentVFO->Mode == TRX_MODE_AM || CurrentVFO->Mode == TRX_MODE_SAM_STEREO || CurrentVFO->Mode == TRX_MODE_SAM_LSB || CurrentVFO->Mode == TRX_MODE_SAM_USB) {
+		if (vfo->Mode == TRX_MODE_AM || vfo->Mode == TRX_MODE_SAM_STEREO || vfo->Mode == TRX_MODE_SAM_LSB || vfo->Mode == TRX_MODE_SAM_USB) {
 			step = (float64_t)TRX.FRQ_STEP_AM_Hz;
 			air_step = step == 8333;
 		}
@@ -1253,7 +1254,10 @@ void TRX_DoFrequencyEncoder(float32_t direction, bool secondary_encoder) {
 		}
 	}
 
-	TRX_setFrequency(newfreq, CurrentVFO);
+	TRX_setFrequency(newfreq, vfo);
+	if (TRX.SPLIT_Enabled && TRX.SplitModeType == SPLIT_MODE_DX && vfo == SecondaryVFO) {
+		NeedWTFRedraw = true;
+	}
 }
 
 /// BUTTON HANDLERS ///
@@ -2039,8 +2043,15 @@ void BUTTONHANDLER_SPLIT(uint32_t parameter) {
 	TRX.SPLIT_Enabled = !TRX.SPLIT_Enabled;
 	TRX.XIT_Enabled = false;
 	TRX.RIT_Enabled = false;
+
 	TRX_setFrequency(CurrentVFO->Freq, CurrentVFO);
-	TRX_setFrequency(SecondaryVFO->Freq, SecondaryVFO);
+
+	if (TRX.SPLIT_Enabled && TRX.SplitModeType == SPLIT_MODE_DX) {
+		TRX_setFrequency(CurrentVFO->Freq + 5000, SecondaryVFO);
+		TRX_setMode(CurrentVFO->Mode, SecondaryVFO);
+	} else {
+		TRX_setFrequency(SecondaryVFO->Freq, SecondaryVFO);
+	}
 
 	LCD_UpdateQuery.TopButtons = true;
 	NeedSaveSettings = true;
