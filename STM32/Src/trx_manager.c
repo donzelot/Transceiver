@@ -1687,7 +1687,7 @@ void BUTTONHANDLER_VHF_BAND_SWITCH(uint32_t parameter) {
 		if (band >= BANDS_COUNT) {
 			band = BANDID_4m;
 		}
-		
+
 		tryes++;
 		if (tryes > 200) {
 			return;
@@ -2251,68 +2251,68 @@ void BUTTONHANDLER_DOWN(uint32_t parameter) {
 }
 
 void BUTTONHANDLER_TANGENT_A(uint32_t parameter) {
-// println("A");	
+	// println("A");
 }
 
 void BUTTONHANDLER_TANGENT_B(uint32_t parameter) {
-//	println("B");	
+	//	println("B");
 }
 
 void BUTTONHANDLER_TANGENT_C(uint32_t parameter) {
-//	println("C");	
-}	
+	//	println("C");
+}
 
 void BUTTONHANDLER_TANGENT_D(uint32_t parameter) {
-//	println("D");	
+	//	println("D");
 }
 
 void BUTTONHANDLER_TANGENT_1(uint32_t parameter) {
-//	println("1");	
+	//	println("1");
 }
 
 void BUTTONHANDLER_TANGENT_2(uint32_t parameter) {
-//	println("2");	
+	//	println("2");
 }
 
 void BUTTONHANDLER_TANGENT_3(uint32_t parameter) {
-//	println("3");	
-}	
+	//	println("3");
+}
 
 void BUTTONHANDLER_TANGENT_4(uint32_t parameter) {
-//	println("4");	
+	//	println("4");
 }
 
 void BUTTONHANDLER_TANGENT_5(uint32_t parameter) {
-//	println("5");	
+	//	println("5");
 }
 
 void BUTTONHANDLER_TANGENT_6(uint32_t parameter) {
-//	println("6");	
+	//	println("6");
 }
 
 void BUTTONHANDLER_TANGENT_7(uint32_t parameter) {
-//	println("7");	
-}	
+	//	println("7");
+}
 
 void BUTTONHANDLER_TANGENT_8(uint32_t parameter) {
-//	println("8");	
+	//	println("8");
 }
 
 void BUTTONHANDLER_TANGENT_9(uint32_t parameter) {
-//	println("9");	
+	//	println("9");
 }
 
 void BUTTONHANDLER_TANGENT_0(uint32_t parameter) {
-//	println("0");	
+	//	println("0");
 }
 
 void BUTTONHANDLER_TANGENT_STAR(uint32_t parameter) {
-//	println("Star");	
+	//	println("Star");
 }
 
 void BUTTONHANDLER_TANGENT_JAIL(uint32_t parameter) {
-//	println("Jail");	
-}	
+	//	println("Jail");
+}
 
 void BUTTONHANDLER_SET_CUR_VFO_BAND(uint32_t parameter) {
 	int8_t band = parameter;

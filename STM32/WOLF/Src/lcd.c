@@ -2735,7 +2735,7 @@ bool LCD_processSwipeTouch(uint16_t x, uint16_t y, int16_t dx, int16_t dy) {
 		if (dx > 0) {
 			newfreq = floorl(newfreq / step) * step;
 		}
-		
+
 		if (TRX.FREE_Tune) {
 			newfreq = getFreqOnFFTPosition(getFreqPositionOnFFT(vfo->Freq, true) + (float64_t)dx / slowler);
 			if (dx > 0) {

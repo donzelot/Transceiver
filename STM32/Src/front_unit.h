@@ -63,7 +63,7 @@ extern int8_t FRONTPANEL_ProcessEncoder2;
 extern void FRONTPANEL_Init(void);
 extern void FRONTPANEL_Process(void);
 extern void FRONTPANEL_CheckButton(PERIPH_FrontPanel_Button *button, uint16_t mcp3008_value);
-extern void FRONTPANEL_CheckButton_Tangent(PERIPH_FrontPanel_Button *button, uint16_t SW1_value, uint16_t SW2_value );
+extern void FRONTPANEL_CheckButton_Tangent(PERIPH_FrontPanel_Button *button, uint16_t SW1_value, uint16_t SW2_value);
 extern void FRONTPANEL_ENCODER_Rotated(float32_t direction);
 extern void FRONTPANEL_ENC2SW_validate();
 extern void FRONTPANEL_check_ENC2SW(bool state);
