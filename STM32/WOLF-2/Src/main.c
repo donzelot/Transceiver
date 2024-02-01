@@ -151,7 +151,11 @@ static void MX_JPEG_Init(void);
  */
 int main(void) {
 	/* USER CODE BEGIN 1 */
-	MX_GPIO_Init(); // pwr hold
+	// PWR hold
+	MX_GPIO_Init();
+	// Reset RF registers state
+	RF_UNIT_UpdateState(true);
+
 	/* USER CODE END 1 */
 
 	/* MPU Configuration--------------------------------------------------------*/
@@ -244,6 +248,10 @@ int main(void) {
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	HAL_GPIO_Init(T_INT_GPIO_Port, &GPIO_InitStruct);
 #endif
+
+	// Reset RF registers state
+	RF_UNIT_UpdateState(true);
+
 	__HAL_RCC_CSI_ENABLE();
 	__HAL_RCC_SYSCFG_CLK_ENABLE();
 	__HAL_RCC_BKPRAM_CLK_ENABLE();
@@ -297,6 +305,9 @@ int main(void) {
 	} else {
 		LoadCalibration(false);
 	}
+
+	// Reset RF registers state
+	RF_UNIT_UpdateState(true);
 
 	TRX.Locked = false;
 	println("[OK] LCD init");
