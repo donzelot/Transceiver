@@ -132,6 +132,23 @@ extern void BUTTONHANDLER_MEMO_READ(uint32_t parameter);
 extern void BUTTONHANDLER_SET_VFOA_FREQ_MANUAL(uint32_t parameter);
 extern void BUTTONHANDLER_SET_VFOB_FREQ_MANUAL(uint32_t parameter);
 extern void BUTTONHANDLER_Free_tune(uint32_t parameter);
+//MH-48 Keyboard
+extern void BUTTONHANDLER_A(uint32_t parameter);
+extern void BUTTONHANDLER_B(uint32_t parameter);
+extern void BUTTONHANDLER_C(uint32_t parameter);
+extern void BUTTONHANDLER_D(uint32_t parameter);
+extern void BUTTONHANDLER_1(uint32_t parameter);
+extern void BUTTONHANDLER_2(uint32_t parameter);
+extern void BUTTONHANDLER_3(uint32_t parameter);
+extern void BUTTONHANDLER_4(uint32_t parameter);
+extern void BUTTONHANDLER_5(uint32_t parameter);
+extern void BUTTONHANDLER_6(uint32_t parameter);
+extern void BUTTONHANDLER_7(uint32_t parameter);
+extern void BUTTONHANDLER_8(uint32_t parameter);
+extern void BUTTONHANDLER_9(uint32_t parameter);
+extern void BUTTONHANDLER_0(uint32_t parameter);
+extern void BUTTONHANDLER_STAR(uint32_t parameter);
+extern void BUTTONHANDLER_JAIL(uint32_t parameter);
 
 volatile extern bool TRX_ptt_hard;
 volatile extern bool TRX_ptt_soft;

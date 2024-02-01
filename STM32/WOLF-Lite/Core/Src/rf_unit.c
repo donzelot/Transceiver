@@ -46,7 +46,7 @@ void RF_UNIT_ProcessSensors(void) {
 	static float32_t SW2_Voltage = 0.0f;
 	static float32_t SW1_Voltage_new = 0.0f;
 	static float32_t SW2_Voltage_new = 0.0f;
-	static float32_t k = 0.0f; // averaging ratio
+	static float32_t k = 0.1f; // averaging ratio
 
 	HAL_ADCEx_InjectedPollForConversion(&hadc3, 100); // wait if prev conversion not ended
 
@@ -166,16 +166,11 @@ void RF_UNIT_ProcessSensors(void) {
 	SW1_Voltage = (SW1_Voltage * k + SW1_Voltage_new * (1.0f - k));
 	SW2_Voltage = (SW2_Voltage * k + SW2_Voltage_new * (1.0f - k));
 
-	//	println("SW1_Voltage - ", (double) SW1_Voltage, "  **  SW2_Voltage - ", (double) SW2_Voltage);
+//	println("SW1_Voltage - ", (double) SW1_Voltage, "  **  SW2_Voltage - ", (double) SW2_Voltage);
 
 	// Yaesu MH-48
-	for (uint16_t tb = 0; tb < (sizeof(PERIPH_FrontPanel_TANGENT_MH48) / sizeof(PERIPH_FrontPanel_Button)); tb++) {
-		if ((SW2_Voltage < 500.0f || SW2_Voltage > 3100.0f) && PERIPH_FrontPanel_TANGENT_MH48[tb].channel == 1) {
-			FRONTPANEL_CheckButton(&PERIPH_FrontPanel_TANGENT_MH48[tb], SW1_Voltage);
-		}
-		if (SW1_Voltage > 2800.0f & PERIPH_FrontPanel_TANGENT_MH48[tb].channel == 2) {
-			FRONTPANEL_CheckButton(&PERIPH_FrontPanel_TANGENT_MH48[tb], SW2_Voltage);
-		}
+	for (uint16_t tb = 0; tb < (ARRLENTH(PERIPH_FrontPanel_TANGENT_MH48)); tb++) {
+			FRONTPANEL_CheckButton_MH48(&PERIPH_FrontPanel_TANGENT_MH48[tb], SW1_Voltage, SW2_Voltage);
 	}
 
 	HAL_ADCEx_InjectedStart(&hadc3); // start next manual conversion
