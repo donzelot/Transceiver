@@ -901,6 +901,11 @@ bool FFT_printFFT(void) {
 	uint16_t tmp = 0;
 	uint16_t fftHeight = GET_FFTHeight;
 	uint16_t wtfHeight = GET_WTFHeight;
+	#if HRDW_HAS_DUAL_RX
+	bool FFT_Show_Sec_VFO = TRX.Show_Sec_VFO || TRX.SPLIT_Enabled || TRX.Dual_RX;
+	#else
+	bool FFT_Show_Sec_VFO = TRX.Show_Sec_VFO || TRX.SPLIT_Enabled;
+	#endif
 	uint_fast8_t decoder_offset = 0;
 	if (NeedProcessDecoder) {
 		decoder_offset = LAYOUT->FFT_CWDECODER_OFFSET;
@@ -2214,6 +2219,7 @@ void FFT_ShortBufferPrintFFT(void) {
 static void FFT_3DPrintFFT(void) {
 	uint16_t wtfHeight = GET_WTFHeight;
 	uint16_t fftHeight = GET_FFTHeight;
+	bool FFT_Show_Sec_VFO = TRX.Show_Sec_VFO || TRX.SPLIT_Enabled || TRX.Dual_RX;
 	uint_fast8_t decoder_offset = 0;
 	if (NeedProcessDecoder) {
 		decoder_offset = LAYOUT->FFT_CWDECODER_OFFSET;

@@ -1161,11 +1161,15 @@ void TRX_setFrequencySlowly_Process(void) {
 	int64_t diff = vfo->Freq - setFreqSlowly_target;
 	if (diff > TRX_SLOW_SETFREQ_MIN_STEPSIZE || diff < -TRX_SLOW_SETFREQ_MIN_STEPSIZE) {
 		TRX_setFrequency(vfo->Freq - diff / 4, vfo);
-		LCD_UpdateQuery.FreqInfo = true;
 	} else {
 		TRX_setFrequency(setFreqSlowly_target, vfo);
-		LCD_UpdateQuery.FreqInfo = true;
 		setFreqSlowly_processing = false;
+	}
+	
+	LCD_UpdateQuery.FreqInfo = true;
+	
+	if (vfo == SecondaryVFO) {
+		NeedWTFRedraw = true;
 	}
 }
 
@@ -1262,6 +1266,7 @@ void BUTTONHANDLER_DOUBLE(uint32_t parameter) {
 #endif
 
 	LCD_UpdateQuery.TopButtons = true;
+	NeedWTFRedraw = true;
 }
 
 void BUTTONHANDLER_DOUBLEMODE(uint32_t parameter) {
@@ -2034,8 +2039,10 @@ void BUTTONHANDLER_SPLIT(uint32_t parameter) {
 	TRX.RIT_Enabled = false;
 	TRX_setFrequency(CurrentVFO->Freq, CurrentVFO);
 	TRX_setFrequency(SecondaryVFO->Freq, SecondaryVFO);
+	
 	LCD_UpdateQuery.TopButtons = true;
 	NeedSaveSettings = true;
+	NeedWTFRedraw = true;
 }
 
 void BUTTONHANDLER_LOCK(uint32_t parameter) {
