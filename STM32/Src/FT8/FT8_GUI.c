@@ -8,21 +8,27 @@
 uint8_t FT8_Menu_Idx;
 static uint8_t Sel_Mess_Idx; // Selected recieved mesage index (used when we want to answer somebodey)
 
-static ButtonStruct sButtonData[] = {{/*text*/ " CQ ", // button 0
-                                      /*state*/ false},
+static ButtonStruct sButtonData[] = {
+    {/*text*/ " CQ ", // button 0
+     /*state*/ false},
 
-                                     {/*text*/ "TUNE", // button 1
-                                      /*state*/ false},
+    {/*text*/ "TUNE", // button 1
+     /*state*/ false},
 
-                                     {/*text*/ "RT_C", // button 2
-                                      /*state*/ false}
+    {/*text*/ "RT_C", // button 2
+     /*state*/ false},
 
+    {/*text*/ "EXIT", // button 3
+     /*state*/ false},
 };
 
 void Draw_FT8_Buttons(void) {
 	drawButton(0);
 	drawButton(1);
 	drawButton(2);
+#if (defined(LAY_800x480))
+	drawButton(3);
+#endif
 }
 
 // used to deactivate all buttons (if something is active and we reenter the "FT8 decode"- to start clear)
@@ -33,7 +39,10 @@ void Unarm_FT8_Buttons(void) {
 }
 
 void drawButton(uint16_t i) {
-	// char ctmp[5] = {0};
+	uint8_t array_position = i;
+	if (i == 3) { // exit button hook
+		i = FT8_Menu_Exit_Position;
+	}
 
 	uint16_t color;
 	if (sButtonData[i].state) {
@@ -43,9 +52,9 @@ void drawButton(uint16_t i) {
 	}
 
 #if (defined(LAY_320x240))
-	LCDDriver_printText(sButtonData[i].text, (FT8_button_spac_x * i) + 7, FT8_button_line + 7, COLOR_WHITE, COLOR_BLACK, 1);
+	LCDDriver_printText(sButtonData[array_position].text, (FT8_button_spac_x * i) + 7, FT8_button_line + 7, COLOR_WHITE, COLOR_BLACK, 1);
 #else
-	LCDDriver_printText(sButtonData[i].text, (FT8_button_spac_x * i) + 7, FT8_button_line + 7, COLOR_WHITE, COLOR_BLACK, 2);
+	LCDDriver_printText(sButtonData[array_position].text, (FT8_button_spac_x * i) + 7, FT8_button_line + 7, COLOR_WHITE, COLOR_BLACK, 2);
 #endif
 	LCDDriver_drawRectXY(FT8_button_spac_x * i, FT8_button_line, (FT8_button_spac_x * i) + FT8_button_width, FT8_button_line + FT8_button_height, color);
 }
@@ -54,33 +63,28 @@ void Update_FT8_Menu_Cursor(void) {
 	static uint8_t old_Sel_Mess_Idx;
 
 	// Clear old Button cursor (all posible cursors)
-	LCDDriver_drawLine(0, FT8_button_line - 5, (FT8_Menu_Max_Idx * FT8_button_spac_x) + FT8_button_width, FT8_button_line - 5, COLOR_BLACK);
+	LCDDriver_drawLine(0, FT8_button_line - 5, LCD_WIDTH, FT8_button_line - 5, COLOR_BLACK);
 
 	// Clear the old recieved mesage cursor
 #if (defined(LAY_320x240))
-	LCDDriver_drawLine(10, 112 + (old_Sel_Mess_Idx)*18, 100, 112 + (old_Sel_Mess_Idx)*18, COLOR_BLACK);
+	LCDDriver_drawLine(10, 112 + old_Sel_Mess_Idx * 18, 100, 112 + old_Sel_Mess_Idx * 18, COLOR_BLACK);
 #else
-	LCDDriver_drawLine(10, 115 + (old_Sel_Mess_Idx)*25, 70, 115 + (old_Sel_Mess_Idx)*25, COLOR_BLACK);
+	LCDDriver_drawLine(10, 115 + old_Sel_Mess_Idx * 25, 70, 115 + old_Sel_Mess_Idx * 25, COLOR_BLACK);
 #endif
 
 	if (FT8_Menu_Idx <= FT8_Menu_Max_Idx) // cursor is in the range of the buttons
 	{
-		// LCDDriver_drawLine(10, 115, 70, 115, COLOR_BLACK);		//clear the cursor of the first recieved mesage (it is needed by transition between
-		// the two fields)
-		LCDDriver_drawLine(10, 115, 70, 115,
-		                   COLOR_BLACK); // clear the cursor of the last recieved mesage (it is needed by transition between the two fields)
+		uint8_t line_index = FT8_Menu_Idx;
+		if (line_index == 3) { // exit button hook
+			line_index = FT8_Menu_Exit_Position;
+		}
+		// clear the cursor of the last recieved mesage (it is needed by transition between the two fields)
+		LCDDriver_drawLine(10, 115, 70, 115, COLOR_BLACK);
 		// Draw the new position of the cursor (for buttons)
-		LCDDriver_drawLine(FT8_Menu_Idx * FT8_button_spac_x, FT8_button_line - 5, (FT8_Menu_Idx * FT8_button_spac_x) + FT8_button_width, FT8_button_line - 5, COLOR_WHITE);
+		LCDDriver_drawLine(line_index * FT8_button_spac_x, FT8_button_line - 5, (line_index * FT8_button_spac_x) + FT8_button_width, FT8_button_line - 5, COLOR_WHITE);
 	} else // cursor is in the rage of the recieved mesages
 	{
 		Sel_Mess_Idx = FT8_Menu_Idx - (FT8_Menu_Max_Idx + 1);
-		/*
-		      //Clear the old recieved mesage cursor
-		      if(Sel_Mess_Idx > 0)
-		        LCDDriver_drawLine(10, 115 + (Sel_Mess_Idx-1) *25, 70, 115 + (Sel_Mess_Idx-1) *25, COLOR_BLACK);
-		      if(Sel_Mess_Idx < 5)				//max number of messages - 1 => we are on the before last position
-		        LCDDriver_drawLine(10, 115 + (Sel_Mess_Idx+1) *25, 70, 115 + (Sel_Mess_Idx+1) *25, COLOR_BLACK);
-		*/
 		// Draw the new position of the cursor (recieved messages)
 #if (defined(LAY_320x240))
 		LCDDriver_drawLine(10, 112 + Sel_Mess_Idx * 18, 100, 112 + Sel_Mess_Idx * 18, COLOR_WHITE);
@@ -128,6 +132,12 @@ void FT8_Menu_Pos_Toggle(void) {
 
 				drawButton(0); // update the "CQ" button
 				FT8_Clear_TX_Mess();
+			}
+			break;
+
+		case 3:
+			if (sButtonData[3].state) { // Exit button pressed
+				BUTTONHANDLER_MENU(0);
 			}
 			break;
 		}

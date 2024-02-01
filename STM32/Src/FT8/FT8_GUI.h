@@ -6,7 +6,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#if (defined(LAY_800x480))
+#define FT8_Menu_Max_Idx 3 // 4 Buttons in total
+#else
 #define FT8_Menu_Max_Idx 2 // 3 Buttons in total
+#endif
+#define FT8_Menu_Exit_Position 9
 
 #if (defined(LAY_800x480))
 #define FT8_button_spac_x 75 // Spacing betwenn the buttons

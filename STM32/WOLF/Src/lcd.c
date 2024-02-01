@@ -2357,6 +2357,12 @@ void LCD_processTouch(uint16_t x, uint16_t y) {
 			FT8_Enc2Click();
 		}
 
+		// Exit
+		if (y >= (FT8_button_line) && y <= (FT8_button_line + FT8_button_height) && x >= (FT8_button_spac_x * FT8_Menu_Exit_Position) &&
+		    x <= ((FT8_button_spac_x * FT8_Menu_Exit_Position) + FT8_button_width)) {
+			BUTTONHANDLER_MENU(0);
+		}
+
 		return;
 	}
 
