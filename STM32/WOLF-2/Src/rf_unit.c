@@ -47,6 +47,12 @@ static uint8_t getBPFByFreq(uint32_t freq) {
 
 void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 {
+	// Temp sensor
+	float32_t Temperature = TRX_RF_Temperature;
+	if (CALIBRATE.FAN_On_By_MotherBoard) {
+		Temperature = MAX(TRX_RF_Temperature, TRX_STM32_TEMPERATURE);
+	}
+
 	// STM32 PTT_OUT
 	HAL_GPIO_WritePin(PTT_OUT_GPIO_Port, PTT_OUT_Pin, TRX_on_TX ? GPIO_PIN_SET : GPIO_PIN_RESET);
 
@@ -442,15 +448,15 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	shift_array[0] = false;                                  // Tuner_U2	Reserved
 
 	static bool fan_pwm = false;
-	if (FAN_Active && TRX_RF_Temperature <= CALIBRATE.FAN_MEDIUM_STOP) { // Temperature at which the fan stops
+	if (FAN_Active && Temperature <= CALIBRATE.FAN_MEDIUM_STOP) { // Temperature at which the fan stops
 		FAN_Active = false;
 	}
-	if (TRX_RF_Temperature >= CALIBRATE.FAN_MEDIUM_START) // Temperature at which the fan starts at half power
+	if (Temperature >= CALIBRATE.FAN_MEDIUM_START) // Temperature at which the fan starts at half power
 	{
 		FAN_Active = true;
 		fan_pwm = true;
 	}
-	if (TRX_RF_Temperature >= CALIBRATE.FAN_FULL_START) { // Temperature at which the fan starts at full power
+	if (Temperature >= CALIBRATE.FAN_FULL_START) { // Temperature at which the fan starts at full power
 		fan_pwm = false;
 	}
 

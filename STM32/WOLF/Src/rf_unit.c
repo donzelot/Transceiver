@@ -60,6 +60,13 @@ static uint8_t getBPFByFreq(uint32_t freq) {
 
 void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 {
+	// Temp sensor
+	float32_t Temperature = TRX_RF_Temperature;
+	if (CALIBRATE.FAN_On_By_MotherBoard) {
+		Temperature = MAX(TRX_RF_Temperature, TRX_STM32_TEMPERATURE);
+	}
+
+	// Dual RX
 	bool dualrx_lpf_disabled = false;
 	bool dualrx_bpf_disabled = false;
 	if (CALIBRATE.RF_unit_type == RF_UNIT_QRP || CALIBRATE.RF_unit_type == RF_UNIT_RU4PN || CALIBRATE.RF_unit_type == RF_UNIT_KT_100S || CALIBRATE.RF_unit_type == RF_UNIT_WF_100D) {
@@ -71,6 +78,7 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 		}
 	}
 
+	// Attenuator
 	float32_t att_val = TRX.ATT_DB;
 	bool att_val_16 = false, att_val_8 = false, att_val_4 = false, att_val_2 = false, att_val_1 = false, att_val_05 = false;
 	if (att_val >= 16.0f) {
@@ -289,15 +297,15 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 				if (registerNumber == 22) // FAN
 				{
 					static bool fan_pwm = false;
-					if (FAN_Active && TRX_RF_Temperature <= CALIBRATE.FAN_MEDIUM_STOP) { // Temperature at which the fan stops
+					if (FAN_Active && Temperature <= CALIBRATE.FAN_MEDIUM_STOP) { // Temperature at which the fan stops
 						FAN_Active = false;
 					}
-					if (TRX_RF_Temperature >= CALIBRATE.FAN_MEDIUM_START) // Temperature at which the fan starts at half power
+					if (Temperature >= CALIBRATE.FAN_MEDIUM_START) // Temperature at which the fan starts at half power
 					{
 						FAN_Active = true;
 						fan_pwm = true;
 					}
-					if (TRX_RF_Temperature >= CALIBRATE.FAN_FULL_START) { // Temperature at which the fan starts at full power
+					if (Temperature >= CALIBRATE.FAN_FULL_START) { // Temperature at which the fan starts at full power
 						fan_pwm = false;
 					}
 
@@ -504,15 +512,15 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 				// U11-6 FAN_OUT
 				if (registerNumber == 33) {
 					static bool fan_pwm = false;
-					if (FAN_Active && TRX_RF_Temperature <= CALIBRATE.FAN_MEDIUM_STOP) { // Temperature at which the fan stops
+					if (FAN_Active && Temperature <= CALIBRATE.FAN_MEDIUM_STOP) { // Temperature at which the fan stops
 						FAN_Active = false;
 					}
-					if (TRX_RF_Temperature >= CALIBRATE.FAN_MEDIUM_START) // Temperature at which the fan starts at half power
+					if (Temperature >= CALIBRATE.FAN_MEDIUM_START) // Temperature at which the fan starts at half power
 					{
 						FAN_Active = true;
 						fan_pwm = true;
 					}
-					if (TRX_RF_Temperature >= CALIBRATE.FAN_FULL_START) { // Temperature at which the fan starts at full power
+					if (Temperature >= CALIBRATE.FAN_FULL_START) { // Temperature at which the fan starts at full power
 						fan_pwm = false;
 					}
 
@@ -630,15 +638,15 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 				// U5-0 FAN_OUT
 				if (registerNumber == 7) {
 					static bool fan_pwm = false;
-					if (FAN_Active && TRX_RF_Temperature <= CALIBRATE.FAN_MEDIUM_STOP) { // Temperature at which the fan stops
+					if (FAN_Active && Temperature <= CALIBRATE.FAN_MEDIUM_STOP) { // Temperature at which the fan stops
 						FAN_Active = false;
 					}
-					if (TRX_RF_Temperature >= CALIBRATE.FAN_MEDIUM_START) // Temperature at which the fan starts at half power
+					if (Temperature >= CALIBRATE.FAN_MEDIUM_START) // Temperature at which the fan starts at half power
 					{
 						FAN_Active = true;
 						fan_pwm = true;
 					}
-					if (TRX_RF_Temperature >= CALIBRATE.FAN_FULL_START) { // Temperature at which the fan starts at full power
+					if (Temperature >= CALIBRATE.FAN_FULL_START) { // Temperature at which the fan starts at full power
 						fan_pwm = false;
 					}
 
@@ -870,15 +878,15 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 		shift_array[16] = currentAnt == TRX_ANT_2; // U11-7 ANT1-2_OUT
 		shift_array[17] = false;                   // U11-6 FAN_OUT
 		static bool fan_pwm = false;
-		if (FAN_Active && TRX_RF_Temperature <= CALIBRATE.FAN_MEDIUM_STOP) { // Temperature at which the fan stops
+		if (FAN_Active && Temperature <= CALIBRATE.FAN_MEDIUM_STOP) { // Temperature at which the fan stops
 			FAN_Active = false;
 		}
-		if (TRX_RF_Temperature >= CALIBRATE.FAN_MEDIUM_START) // Temperature at which the fan starts at half power
+		if (Temperature >= CALIBRATE.FAN_MEDIUM_START) // Temperature at which the fan starts at half power
 		{
 			FAN_Active = true;
 			fan_pwm = true;
 		}
-		if (TRX_RF_Temperature >= CALIBRATE.FAN_FULL_START) { // Temperature at which the fan starts at full power
+		if (Temperature >= CALIBRATE.FAN_FULL_START) { // Temperature at which the fan starts at full power
 			fan_pwm = false;
 		}
 
@@ -1017,15 +1025,15 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 		// U1-6 FAN_OUT
 		wf_100d_shift_array[1] = false;
 		static bool fan_pwm = false;
-		if (FAN_Active && TRX_RF_Temperature <= CALIBRATE.FAN_MEDIUM_STOP) { // Temperature at which the fan stops
+		if (FAN_Active && Temperature <= CALIBRATE.FAN_MEDIUM_STOP) { // Temperature at which the fan stops
 			FAN_Active = false;
 		}
-		if (TRX_RF_Temperature >= CALIBRATE.FAN_MEDIUM_START) // Temperature at which the fan starts at half power
+		if (Temperature >= CALIBRATE.FAN_MEDIUM_START) // Temperature at which the fan starts at half power
 		{
 			FAN_Active = true;
 			fan_pwm = true;
 		}
-		if (TRX_RF_Temperature >= CALIBRATE.FAN_FULL_START) { // Temperature at which the fan starts at full power
+		if (Temperature >= CALIBRATE.FAN_FULL_START) { // Temperature at which the fan starts at full power
 			fan_pwm = false;
 		}
 

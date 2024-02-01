@@ -421,6 +421,7 @@ static void SYSMENU_HANDL_CALIB_FAN_FULL_START(int8_t direction);
 static void SYSMENU_HANDL_CALIB_FAN_MEDIUM_START(int8_t direction);
 static void SYSMENU_HANDL_CALIB_FAN_MEDIUM_STOP(int8_t direction);
 static void SYSMENU_HANDL_CALIB_FAN_Medium_speed(int8_t direction);
+static void SYSMENU_HANDL_CALIB_FAN_On_By_MotherBoard(int8_t direction);
 static void SYSMENU_HANDL_CALIB_FM_DEVIATION_SCALE(int8_t direction);
 static void SYSMENU_HANDL_CALIB_FlashGT911(int8_t direction);
 static void SYSMENU_HANDL_CALIB_HPF_START(int8_t direction);
@@ -1288,6 +1289,7 @@ const static struct sysmenu_item_handler sysmenu_calibration_handlers[] = {
     {"FAN Medium start", SYSMENU_UINT8, NULL, (uint32_t *)&CALIBRATE.FAN_MEDIUM_START, SYSMENU_HANDL_CALIB_FAN_MEDIUM_START},
     {"FAN Medium stop", SYSMENU_UINT8, NULL, (uint32_t *)&CALIBRATE.FAN_MEDIUM_STOP, SYSMENU_HANDL_CALIB_FAN_MEDIUM_STOP},
     {"FAN Medium PWM", SYSMENU_UINT8, NULL, (uint32_t *)&CALIBRATE.FAN_Medium_speed, SYSMENU_HANDL_CALIB_FAN_Medium_speed},
+    {"FAN Motherboard", SYSMENU_BOOLEAN, NULL, (uint32_t *)&CALIBRATE.FAN_On_By_MotherBoard, SYSMENU_HANDL_CALIB_FAN_On_By_MotherBoard},
 #endif
     {"FM Deviation Scale", SYSMENU_UINT8, NULL, (uint32_t *)&CALIBRATE.FM_DEVIATION_SCALE, SYSMENU_HANDL_CALIB_FM_DEVIATION_SCALE},
 #if HAS_TOUCHPAD
@@ -8153,6 +8155,15 @@ static void SYSMENU_HANDL_CALIB_TX_StartDelay(int8_t direction) {
 	}
 	if (CALIBRATE.TX_StartDelay > 2000) {
 		CALIBRATE.TX_StartDelay = 2000;
+	}
+}
+
+static void SYSMENU_HANDL_CALIB_FAN_On_By_MotherBoard(int8_t direction) {
+	if (direction > 0) {
+		CALIBRATE.FAN_On_By_MotherBoard = true;
+	}
+	if (direction < 0) {
+		CALIBRATE.FAN_On_By_MotherBoard = false;
 	}
 }
 

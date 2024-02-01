@@ -1512,6 +1512,7 @@ static void SDCOMM_EXPORT_CALIBRATIONS_handler(void) {
 			SD_WRITE_SETT_LINE("CALIBRATE.ENABLE_70cm_band", (uint64_t *)&CALIBRATE.ENABLE_70cm_band, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("CALIBRATE.ENABLE_23cm_band", (uint64_t *)&CALIBRATE.ENABLE_23cm_band, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("CALIBRATE.VHF_Mixer_Board", (uint64_t *)&CALIBRATE.VHF_Mixer_Board, SYSMENU_BOOLEAN);
+			SD_WRITE_SETT_LINE("CALIBRATE.FAN_On_By_MotherBoard", (uint64_t *)&CALIBRATE.FAN_On_By_MotherBoard, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("CALIBRATE.Transverter_Custom_Offset_MHz", (uint64_t *)&CALIBRATE.Transverter_Custom_Offset_MHz, SYSMENU_UINT16);
 			SD_WRITE_SETT_LINE("CALIBRATE.Transverter_2m_RF_MHz", (uint64_t *)&CALIBRATE.Transverter_2m_RF_MHz, SYSMENU_UINT16);
 			SD_WRITE_SETT_LINE("CALIBRATE.Transverter_2m_IF_MHz", (uint64_t *)&CALIBRATE.Transverter_2m_IF_MHz, SYSMENU_UINT16);
@@ -3064,6 +3065,9 @@ static void SDCOMM_PARSE_SETTINGS_LINE(char *line) {
 	}
 	if (strcmp(name, "CALIBRATE.VHF_Mixer_Board") == 0) {
 		CALIBRATE.VHF_Mixer_Board = bval;
+	}
+	if (strcmp(name, "CALIBRATE.FAN_On_By_MotherBoard") == 0) {
+		CALIBRATE.FAN_On_By_MotherBoard = bval;
 	}
 	if (strcmp(name, "CALIBRATE.Transverter_Custom_Offset_MHz") == 0) {
 		CALIBRATE.Transverter_Custom_Offset_MHz = (uint16_t)uintval;
