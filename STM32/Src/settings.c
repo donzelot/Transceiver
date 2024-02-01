@@ -181,7 +181,7 @@ void LoadSettings(bool clear) {
 		TRX.FRQ_STEP_DIGI_Hz = 10;          // frequency tuning step DIGI
 		TRX.FRQ_STEP_AM_Hz = 20;            // frequency tuning step AM
 		TRX.FRQ_STEP_FM_Hz = 25;            // frequency tuning step FM
-		TRX.FRQ_STEP_WFM_Hz = 1000;         // frequency tuning step WFM
+		TRX.FRQ_STEP_WFM_Hz = 200;          // frequency tuning step WFM
 		TRX.FAST_STEP_Multiplier = 10;      // Multiplier for FAST mode
 		TRX.ENC2_STEP_Multiplier = 50;      // Multiplier for ENC2 rotate
 		TRX.NOTCH_STEP_Hz = 50;             // Manual NOTCH tuning step

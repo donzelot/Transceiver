@@ -1797,7 +1797,7 @@ static void SYSMENU_HANDL_TRX_XIT_INTERVAL(int8_t direction) {
 }
 
 static void SYSMENU_HANDL_TRX_FRQ_STEP_CW_Hz(int8_t direction) {
-	const float32_t cw_freq_steps[] = {1, 2, 5, 10, 15, 25, 50, 100, 250, 500, 1000, 2500, 5000, 25000, 50000};
+	const float32_t cw_freq_steps[] = {1, 2, 5, 10, 15, 25, 50, 100, 200, 250, 500, 1000, 2500, 5000, 25000, 50000};
 
 	for (uint8_t i = 0; i < ARRLENTH(cw_freq_steps); i++) {
 		if (TRX.FRQ_STEP_CW_Hz == cw_freq_steps[i]) {
@@ -1822,7 +1822,7 @@ static void SYSMENU_HANDL_TRX_FRQ_STEP_CW_Hz(int8_t direction) {
 }
 
 static void SYSMENU_HANDL_TRX_FRQ_STEP_SSB_Hz(int8_t direction) {
-	const float32_t ssb_freq_steps[] = {1, 2, 5, 10, 15, 25, 50, 100, 250, 500, 1000, 2500, 5000, 25000, 50000};
+	const float32_t ssb_freq_steps[] = {1, 2, 5, 10, 15, 25, 50, 100, 200, 250, 500, 1000, 2500, 5000, 25000, 50000};
 
 	for (uint8_t i = 0; i < ARRLENTH(ssb_freq_steps); i++) {
 		if (TRX.FRQ_STEP_SSB_Hz == ssb_freq_steps[i]) {
@@ -1847,7 +1847,7 @@ static void SYSMENU_HANDL_TRX_FRQ_STEP_SSB_Hz(int8_t direction) {
 }
 
 static void SYSMENU_HANDL_TRX_FRQ_STEP_DIGI_Hz(int8_t direction) {
-	const float32_t digi_freq_steps[] = {1, 2, 5, 10, 15, 25, 50, 100, 250, 500, 1000, 2500, 5000, 25000, 50000};
+	const float32_t digi_freq_steps[] = {1, 2, 5, 10, 15, 25, 50, 100, 200, 250, 500, 1000, 2500, 5000, 25000, 50000};
 
 	for (uint8_t i = 0; i < ARRLENTH(digi_freq_steps); i++) {
 		if (TRX.FRQ_STEP_DIGI_Hz == digi_freq_steps[i]) {
@@ -1872,7 +1872,7 @@ static void SYSMENU_HANDL_TRX_FRQ_STEP_DIGI_Hz(int8_t direction) {
 }
 
 static void SYSMENU_HANDL_TRX_FRQ_STEP_AM_Hz(int8_t direction) {
-	const float32_t am_freq_steps[] = {1, 2, 5, 10, 15, 20, 25, 50, 100, 250, 500, 1000, 2000, 2500, 5000, 7500, 8333, 10000, 12500, 15000, 17500, 20000, 22500, 25000, 50000, 75000};
+	const float32_t am_freq_steps[] = {1, 2, 5, 10, 15, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 2500, 5000, 7500, 8333, 10000, 12500, 15000, 17500, 20000, 22500, 25000, 50000, 75000};
 
 	for (uint8_t i = 0; i < ARRLENTH(am_freq_steps); i++) {
 		if (TRX.FRQ_STEP_AM_Hz == am_freq_steps[i]) {
@@ -1897,7 +1897,7 @@ static void SYSMENU_HANDL_TRX_FRQ_STEP_AM_Hz(int8_t direction) {
 }
 
 static void SYSMENU_HANDL_TRX_FRQ_STEP_FM_Hz(int8_t direction) {
-	const float32_t fm_freq_steps[] = {1, 2, 5, 10, 15, 25, 50, 100, 250, 500, 1000, 2000, 2500, 5000, 7500, 10000, 12500, 15000, 17500, 20000, 22500, 25000, 50000, 75000};
+	const float32_t fm_freq_steps[] = {1, 2, 5, 10, 15, 25, 50, 100, 250, 200, 500, 1000, 2000, 2500, 5000, 7500, 10000, 12500, 15000, 17500, 20000, 22500, 25000, 50000, 75000};
 
 	for (uint8_t i = 0; i < ARRLENTH(fm_freq_steps); i++) {
 		if (TRX.FRQ_STEP_FM_Hz == fm_freq_steps[i]) {
@@ -1922,7 +1922,7 @@ static void SYSMENU_HANDL_TRX_FRQ_STEP_FM_Hz(int8_t direction) {
 }
 
 static void SYSMENU_HANDL_TRX_FRQ_STEP_WFM_Hz(int8_t direction) {
-	const uint32_t wfm_freq_steps[] = {1, 2, 5, 10, 15, 25, 50, 100, 250, 500, 1000, 2000, 5000, 10000, 20000, 25000, 50000, 100000, 200000, 500000, 1000000};
+	const uint32_t wfm_freq_steps[] = {1, 2, 5, 10, 15, 25, 50, 100, 200, 250, 500, 1000, 2000, 5000, 10000, 20000, 25000, 50000, 100000, 200000, 500000, 1000000};
 
 	for (uint8_t i = 0; i < ARRLENTH(wfm_freq_steps); i++) {
 		if (TRX.FRQ_STEP_WFM_Hz == wfm_freq_steps[i]) {
