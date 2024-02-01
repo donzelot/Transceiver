@@ -101,6 +101,7 @@ extern void BUTTONHANDLER_SET_VFOA_BAND(uint32_t parameter);
 extern void BUTTONHANDLER_SET_VFOB_BAND(uint32_t parameter);
 extern void BUTTONHANDLER_SET_BAND_MEMORY(uint32_t parameter);
 extern void BUTTONHANDLER_GET_BAND_MEMORY(uint32_t parameter);
+extern void BUTTONHANDLER_VHF_BAND_SWITCH(uint32_t parameter);
 extern void BUTTONHANDLER_SETMODE(uint32_t parameter);
 extern void BUTTONHANDLER_SETSECMODE(uint32_t parameter);
 extern void BUTTONHANDLER_SET_RX_BW(uint32_t parameter);

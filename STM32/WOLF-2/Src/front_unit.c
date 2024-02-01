@@ -222,8 +222,8 @@ PERIPH_FrontPanel_Button PERIPH_FrontPanel_Buttons[] = {
      .prev_state = false,
      .work_in_menu = true,
      .parameter = BANDID_2m,
-     .clickHandler = BUTTONHANDLER_GET_BAND_MEMORY,
-     .holdHandler = BUTTONHANDLER_SET_BAND_MEMORY},
+     .clickHandler = BUTTONHANDLER_VHF_BAND_SWITCH,
+     .holdHandler = BUTTONHANDLER_VHF_BAND_SWITCH},
 
     {.port = 1, .channel = 3, .type = FUNIT_CTRL_AF_GAIN}, // AF GAIN
     {.port = 1, .channel = 4, .type = FUNIT_CTRL_IF_GAIN}, // IF GAIN

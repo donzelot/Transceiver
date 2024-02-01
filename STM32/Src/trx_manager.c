@@ -1668,6 +1668,43 @@ void BUTTONHANDLER_BAND_N(uint32_t parameter) {
 	TRX_ScanMode = false;
 }
 
+void BUTTONHANDLER_VHF_BAND_SWITCH(uint32_t parameter) {
+	if (TRX_on_TX) {
+		return;
+	}
+
+	int8_t band = getBandFromFreq(CurrentVFO->Freq, true);
+	uint8_t tryes = 0;
+	band++;
+	if (band >= BANDS_COUNT) {
+		band = BANDID_4m;
+	}
+	if (band < BANDID_4m) {
+		band = BANDID_4m;
+	}
+	while (!BAND_SELECTABLE[band] || BANDS[band].broadcast) {
+		band++;
+		if (band >= BANDS_COUNT) {
+			band = BANDID_4m;
+		}
+		
+		tryes++;
+		if (tryes > 200) {
+			return;
+		}
+	}
+
+	TRX_setFrequency(TRX.BANDS_SAVED_SETTINGS[band].Freq, CurrentVFO);
+	TRX_setMode(TRX.BANDS_SAVED_SETTINGS[band].Mode, CurrentVFO);
+
+	LCD_UpdateQuery.TopButtons = true;
+	LCD_UpdateQuery.FreqInfoRedraw = true;
+	LCD_UpdateQuery.StatusInfoBarRedraw = true;
+	LCD_UpdateQuery.StatusInfoGUI = true;
+	resetVAD();
+	TRX_ScanMode = false;
+}
+
 void BUTTONHANDLER_RF_POWER(uint32_t parameter) {
 #ifdef HAS_TOUCHPAD
 	LCD_showRFPowerWindow();
