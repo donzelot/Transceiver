@@ -2704,7 +2704,7 @@ bool LCD_processSwipeTouch(uint16_t x, uint16_t y, int16_t dx, int16_t dy) {
 	}
 
 	// fft/wtf swipe
-	if (((LAYOUT->FFT_FFTWTF_POS_Y + 50) <= y) && (LAYOUT->FFT_PRINT_SIZE >= x) && ((LAYOUT->FFT_FFTWTF_POS_Y + FFT_AND_WTF_HEIGHT - 50) >= y)) {
+	if ((LAYOUT->FFT_FFTWTF_POS_Y <= y) && (LAYOUT->FFT_PRINT_SIZE >= x) && ((LAYOUT->FFT_FFTWTF_POS_Y + FFT_AND_WTF_HEIGHT - 50) >= y)) {
 		if (TRX_on_TX) {
 			return false;
 		}
@@ -2728,12 +2728,22 @@ bool LCD_processSwipeTouch(uint16_t x, uint16_t y, int16_t dx, int16_t dy) {
 			step = 1.0;
 		}
 
-		uint64_t newfreq = getFreqOnFFTPosition(getFreqPositionOnFFT(vfo->Freq, true) + (float64_t)dx / slowler);
-		if (dx > 0) {
+		uint64_t newfreq = getFreqOnFFTPosition(getFreqPositionOnFFT(vfo->Freq, true) - (float64_t)dx / slowler);
+		if (dx < 0) {
 			newfreq = ceill(newfreq / step) * step;
 		}
-		if (dx < 0) {
+		if (dx > 0) {
 			newfreq = floorl(newfreq / step) * step;
+		}
+		
+		if (TRX.FREE_Tune) {
+			newfreq = getFreqOnFFTPosition(getFreqPositionOnFFT(vfo->Freq, true) + (float64_t)dx / slowler);
+			if (dx > 0) {
+				newfreq = ceill(newfreq / step) * step;
+			}
+			if (dx < 0) {
+				newfreq = floorl(newfreq / step) * step;
+			}
 		}
 
 		TRX_setFrequency(newfreq, vfo);
