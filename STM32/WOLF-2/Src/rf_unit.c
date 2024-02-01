@@ -339,6 +339,9 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 	uint16_t PCF8575_value = 0;
 	bool PCF8575_array_equal = true;
 	for (uint8_t i = 0; i < PCF8575_ARRAY_SIZE; i++) {
+		if (clean) {
+			PCF8575_array[i] = 0;
+		}
 		PCF8575_value |= PCF8575_array[i] << i;
 
 		if (PCF8575_array[i] != PCF8575_array_old[i]) {
@@ -504,10 +507,8 @@ void RF_UNIT_UpdateState(bool clean) // pass values to RF-UNIT
 		MINI_DELAY
 		HAL_GPIO_WritePin(RFUNIT_DATA_GPIO_Port, RFUNIT_DATA_Pin, GPIO_PIN_RESET); // data
 		MINI_DELAY
-		if (!clean) {
-			if (shift_array[registerNumber]) {
-				SET_DATA_PIN;
-			}
+		if (!clean && shift_array[registerNumber]) {
+			SET_DATA_PIN;
 		}
 		MINI_DELAY
 		HAL_GPIO_WritePin(RFUNIT_CLK_GPIO_Port, RFUNIT_CLK_Pin, GPIO_PIN_SET);
