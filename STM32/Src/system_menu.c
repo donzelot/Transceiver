@@ -231,7 +231,7 @@ static void SYSMENU_HANDL_SCREEN_LAYOUT_THEME(int8_t direction);
 static void SYSMENU_HANDL_SCREEN_LCD_Brightness(int8_t direction);
 static void SYSMENU_HANDL_SCREEN_LCD_SleepTimeout(int8_t direction);
 static void SYSMENU_HANDL_SCREEN_Show_Sec_VFO(int8_t direction);
-static void SYSMENU_HANDL_SCREEN_EnableBottomNavigationButtons(int8_t direction);
+static void SYSMENU_HANDL_SCREEN_BottomNavigationButtons(int8_t direction);
 static void SYSMENU_HANDL_SCREEN_WTF_Color(int8_t direction);
 static void SYSMENU_HANDL_SCREEN_WTF_Moving(int8_t direction);
 #if HRDW_HAS_WIFI
@@ -950,7 +950,7 @@ const static struct sysmenu_item_handler sysmenu_cw_handlers[] = {
 
 const static struct sysmenu_item_handler sysmenu_screen_handlers[] = {
 #if LCD_WIDTH > 700
-    {"Bottom navi buttons", SYSMENU_BOOLEAN, NULL, (uint32_t *)&TRX.EnableBottomNavigationButtons, SYSMENU_HANDL_SCREEN_EnableBottomNavigationButtons},
+    {"Bottom navi buttons", SYSMENU_ENUM, NULL, (uint32_t *)&TRX.BottomNavigationButtons, SYSMENU_HANDL_SCREEN_BottomNavigationButtons, (const enumerate_item[3]){"None", "Center", "Edges"}},
 #endif
 #ifdef LAY_160x128
     {"Color Theme", SYSMENU_ENUMR, NULL, (uint32_t *)&TRX.ColorThemeId, SYSMENU_HANDL_SCREEN_COLOR_THEME, (const enumerate_item[6]){"Black", "White", "Colored", "CN", "C+Green", "C+White"}},
@@ -4530,12 +4530,12 @@ static void SYSMENU_HANDL_SCREEN_Show_Sec_VFO(int8_t direction) {
 	}
 }
 
-static void SYSMENU_HANDL_SCREEN_EnableBottomNavigationButtons(int8_t direction) {
-	if (direction > 0) {
-		TRX.EnableBottomNavigationButtons = true;
+static void SYSMENU_HANDL_SCREEN_BottomNavigationButtons(int8_t direction) {
+	if (TRX.BottomNavigationButtons > 0 || direction > 0) {
+		TRX.BottomNavigationButtons += direction;
 	}
-	if (direction < 0) {
-		TRX.EnableBottomNavigationButtons = false;
+	if (TRX.BottomNavigationButtons > 2) {
+		TRX.BottomNavigationButtons = 2;
 	}
 }
 

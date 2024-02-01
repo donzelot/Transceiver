@@ -393,20 +393,20 @@ void LoadSettings(bool clear) {
 		TRX.FFT_FreqGrid = 1;                          // FFT freq grid style
 		TRX.FFT_Height = 2;                            // FFT display height
 #endif
-		TRX.FFT_dBmGrid = false;                  // FFT power grid
-		TRX.FFT_Lens = false;                     // FFT lens effect
-		TRX.FFT_HoldPeaks = false;                // Show FFT Peaks
-		TRX.FFT_3D = 0;                           // FFT 3D mode
-		TRX.FFT_ManualBottom = -130;              // Minimal threshold for manual FFT scale
-		TRX.FFT_ManualTop = -90;                  // Maximum threshold for manual FFT scale
-		TRX.FFT_DXCluster = true;                 // Show DX cluster over FFT
-		TRX.FFT_DXCluster_Azimuth = false;        // Add azimut to callsign
-		TRX.FFT_DXCluster_Timeout = 5;            // DXCluser timeout in minutes
-		TRX.CenterSpectrumAfterIdle = false;      // Center FFT spectrum in free tune after idle delay
-		TRX.Show_Sec_VFO = false;                 // Show secondary VFO on FFT
-		TRX.FFT_Scale_Type = 0;                   // Scale type (0 - amplitude, 1 - squared, 2 - dBm)
-		TRX.AnalogMeterShowPWR = false;           // false - SWR, true - PWR
-		TRX.EnableBottomNavigationButtons = true; // enable bottom menu navigation buttons
+		TRX.FFT_dBmGrid = false;                          // FFT power grid
+		TRX.FFT_Lens = false;                             // FFT lens effect
+		TRX.FFT_HoldPeaks = false;                        // Show FFT Peaks
+		TRX.FFT_3D = 0;                                   // FFT 3D mode
+		TRX.FFT_ManualBottom = -130;                      // Minimal threshold for manual FFT scale
+		TRX.FFT_ManualTop = -90;                          // Maximum threshold for manual FFT scale
+		TRX.FFT_DXCluster = true;                         // Show DX cluster over FFT
+		TRX.FFT_DXCluster_Azimuth = false;                // Add azimut to callsign
+		TRX.FFT_DXCluster_Timeout = 5;                    // DXCluser timeout in minutes
+		TRX.CenterSpectrumAfterIdle = false;              // Center FFT spectrum in free tune after idle delay
+		TRX.Show_Sec_VFO = false;                         // Show secondary VFO on FFT
+		TRX.FFT_Scale_Type = 0;                           // Scale type (0 - amplitude, 1 - squared, 2 - dBm)
+		TRX.AnalogMeterShowPWR = false;                   // false - SWR, true - PWR
+		TRX.BottomNavigationButtons = NAV_BUTTONS_CENTER; // bottom menu navigation buttons position
 		for (uint8_t i = 0; i < (FUNCBUTTONS_PAGES * FUNCBUTTONS_ON_PAGE); i++) {
 			TRX.FuncButtons[i] = i;
 		}

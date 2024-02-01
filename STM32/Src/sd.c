@@ -1233,7 +1233,7 @@ static void SDCOMM_EXPORT_SETTINGS_handler(void) {
 			SD_WRITE_SETT_LINE("TRX.CenterSpectrumAfterIdle", (uint64_t *)&TRX.CenterSpectrumAfterIdle, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.Show_Sec_VFO", (uint64_t *)&TRX.Show_Sec_VFO, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.FFT_Scale_Type", (uint64_t *)&TRX.FFT_Scale_Type, SYSMENU_UINT8);
-			SD_WRITE_SETT_LINE("TRX.EnableBottomNavigationButtons", (uint64_t *)&TRX.EnableBottomNavigationButtons, SYSMENU_BOOLEAN);
+			SD_WRITE_SETT_LINE("TRX.BottomNavigationButtons", (uint64_t *)&TRX.BottomNavigationButtons, SYSMENU_UINT8);
 			// DECODER
 			SD_WRITE_SETT_LINE("TRX.CW_Decoder", (uint64_t *)&TRX.CW_Decoder, SYSMENU_BOOLEAN);
 			SD_WRITE_SETT_LINE("TRX.CW_Decoder_Threshold", (uint64_t *)&TRX.CW_Decoder_Threshold, SYSMENU_UINT8);
@@ -2477,8 +2477,8 @@ static void SDCOMM_PARSE_SETTINGS_LINE(char *line) {
 	if (strcmp(name, "TRX.Show_Sec_VFO") == 0) {
 		TRX.Show_Sec_VFO = bval;
 	}
-	if (strcmp(name, "TRX.EnableBottomNavigationButtons") == 0) {
-		TRX.EnableBottomNavigationButtons = bval;
+	if (strcmp(name, "TRX.BottomNavigationButtons") == 0) {
+		TRX.BottomNavigationButtons = (uint8_t)uintval;
 	}
 	if (strcmp(name, "TRX.FFT_Scale_Type") == 0) {
 		TRX.FFT_Scale_Type = (uint8_t)uintval;

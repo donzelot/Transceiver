@@ -16,7 +16,7 @@
 #define FPGA_VERSION_STR "8.2.0" // needed FPGA version Wolf/Wolf-2/Wolf-X1
 #endif
 
-#define SETT_VERSION 151        // Settings config version
+#define SETT_VERSION 152        // Settings config version
 #define CALIB_VERSION 93        // Calibration config version
 #define WIFI_SETTINGS_VERSION 5 // WiFi config version
 
@@ -479,6 +479,13 @@ typedef enum {
 	FFT_AUTOMATIC_FULL,
 } FFT_AUTOMATIC_TYPE;
 
+// Bottom navigation buttons position
+typedef enum {
+	NAV_BUTTONS_NONE,
+	NAV_BUTTONS_CENTER,
+	NAV_BUTTONS_EDGES,
+} BOTTOM_NAV_BUTTONS_TYPE;
+
 // ANT select
 typedef enum {
 	TRX_ANT_1,
@@ -734,6 +741,7 @@ extern struct TRX_SETTINGS {
 	CW_PTT_TYPE CW_PTT_Type;
 	ENC2_FUNC_MODE ENC2_func_mode;
 	FFT_AUTOMATIC_TYPE FFT_Automatic_Type;
+	BOTTOM_NAV_BUTTONS_TYPE BottomNavigationButtons;
 #if HRDW_HAS_DUAL_RX
 	DUAL_RX_TYPE Dual_RX_Type;
 #endif
@@ -802,7 +810,6 @@ extern struct TRX_SETTINGS {
 	bool FFT_DXCluster_Azimuth;
 	bool Show_Sec_VFO;
 	bool AnalogMeterShowPWR;
-	bool EnableBottomNavigationButtons;
 	bool CW_Decoder;
 	bool RDS_Decoder;
 	bool RTTY_InvertBits;

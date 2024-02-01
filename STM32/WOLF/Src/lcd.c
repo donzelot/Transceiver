@@ -356,13 +356,19 @@ static void LCD_displayBottomButtons(bool redraw) {
 
 		uint16_t width = LAYOUT->BOTTOM_BUTTONS_ONE_WIDTH;
 
-		if (TRX.EnableBottomNavigationButtons) {
+		if (TRX.BottomNavigationButtons != NAV_BUTTONS_NONE) {
 			width = floorf((float32_t)(LCD_WIDTH - bottomNavigationButtonsWidth * 2) / FUNCBUTTONS_ON_PAGE);
 		} else if (FUNCBUTTONS_ON_PAGE == 9 && i < 8) {
 			width += 1;
 		}
 
-		bool printLeftPutton = TRX.EnableBottomNavigationButtons && ((FUNCBUTTONS_ON_PAGE == 9 && i == 4) || (FUNCBUTTONS_ON_PAGE == 8 && i == 3));
+		bool printLeftPutton = false;
+		if (TRX.BottomNavigationButtons == NAV_BUTTONS_CENTER) {
+			printLeftPutton = (FUNCBUTTONS_ON_PAGE == 9 && i == 4) || (FUNCBUTTONS_ON_PAGE == 8 && i == 3);
+		}
+		if (TRX.BottomNavigationButtons == NAV_BUTTONS_EDGES) {
+			printLeftPutton = (i == 0);
+		}
 		if (printLeftPutton) {
 			printButton(curr_x, LAYOUT->BOTTOM_BUTTONS_BLOCK_TOP, bottomNavigationButtonsWidth, LAYOUT->BOTTOM_BUTTONS_BLOCK_HEIGHT, "<", false, false, false, 0, BUTTONHANDLER_LEFT_ARR,
 			            BUTTONHANDLER_LEFT_ARR, COLOR->BUTTON_PAGER_TEXT, COLOR->BUTTON_PAGER_TEXT, COLOR->BUTTON_BORDER, COLOR->BUTTON_PAGER_BACKGROUND, LAYOUT->TOPBUTTONS_ROUND,
@@ -381,7 +387,16 @@ static void LCD_displayBottomButtons(bool redraw) {
 		}
 		curr_x += width;
 
-		bool printRightPutton = TRX.EnableBottomNavigationButtons && ((FUNCBUTTONS_ON_PAGE == 9 && i == 4) || (FUNCBUTTONS_ON_PAGE == 8 && i == 4));
+		bool printRightPutton = false;
+		if (TRX.BottomNavigationButtons == NAV_BUTTONS_CENTER) {
+			printRightPutton = (FUNCBUTTONS_ON_PAGE == 9 && i == 4) || (FUNCBUTTONS_ON_PAGE == 8 && i == 4);
+		}
+		if (TRX.BottomNavigationButtons == NAV_BUTTONS_EDGES) {
+			printRightPutton = (i == FUNCBUTTONS_ON_PAGE - 1);
+			if (FUNCBUTTONS_ON_PAGE == 9) {
+				width += 1;
+			}
+		}
 		if (printRightPutton) {
 			printButton(curr_x, LAYOUT->BOTTOM_BUTTONS_BLOCK_TOP, bottomNavigationButtonsWidth, LAYOUT->BOTTOM_BUTTONS_BLOCK_HEIGHT, ">", false, false, false, 0, BUTTONHANDLER_RIGHT_ARR,
 			            BUTTONHANDLER_RIGHT_ARR, COLOR->BUTTON_PAGER_TEXT, COLOR->BUTTON_PAGER_TEXT, COLOR->BUTTON_BORDER, COLOR->BUTTON_PAGER_BACKGROUND, LAYOUT->TOPBUTTONS_ROUND,
